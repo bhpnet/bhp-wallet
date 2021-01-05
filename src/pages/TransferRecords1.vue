@@ -5,7 +5,7 @@
       <div class="mainBox1">
         <div class="box">
           <div class="box1">
-            <span>Total assets</span>
+            <span>{{$t('message.text89')}}</span>
             <h2>
               {{ totalAssets ? totalAssets.toFixed(4) : 0 }}
               <span>{{ iteam }}</span>

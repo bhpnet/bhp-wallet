@@ -19,11 +19,12 @@
       >助记词</span>
     </div>
     <div class="mnemonicWords" v-show="!WordsOrkeystore">
-      <textarea class="tarea" v-model="inputMnemonic" :placeholder="$t('message.text108')"></textarea>
-
+      <textarea class="tarea" @input="toFocusWords()"  v-model="inputMnemonic" :placeholder="$t('message.text108')"></textarea>
+      <input class="passwordInput" ref="hideInputWords" type="password" v-model="inputMnemonic" :placeholder="$t('message.text108')">
     </div>
     <div class="mnemonicWords leadPrivateKey" v-show="WordsOrkeystore">
-      <textarea class="tarea" v-model="leadPrivateKey" :placeholder="$route.query.leadWallet=='leadWalletBTC'?$t('message.text84'):$t('message.text844')"></textarea>
+      <textarea class="tarea" @input="toFocusKey()"  v-model="leadPrivateKey" :placeholder="$route.query.leadWallet=='leadWalletBTC'?$t('message.text84'):$t('message.text844')"></textarea>
+      <input class="passwordInput" ref="hideInputKey" type="password" v-model="leadPrivateKey" :placeholder="$route.query.leadWallet=='leadWalletBTC'?$t('message.text84'):$t('message.text844')">
     </div>
     <h3 v-text="$t('message.text82')">Reset wallet name and password</h3>
     <div class="inputName">
@@ -134,6 +135,12 @@ export default {
     }
   },
   methods: {
+    toFocusWords(){
+      this.$refs.hideInputWords.focus()
+    },
+    toFocusKey(){
+      this.$refs.hideInputKey.focus()
+    },
     toClickNext() {
       clickNext(this);
     },
@@ -269,6 +276,16 @@ export default {
       resize: none;
       outline: none;
       border: none;
+      line-height: 30px;
+    }
+     .passwordInput{
+      position: absolute;
+      z-index: -1;
+      color:transparent;//隐藏光标
+      caret-color:transparent;
+      text-indent: -999em;//段落缩进IOS
+      margin-left: -100%
+      // text-shadow: 0 0 0 #000//显示文字;
     }
   }
   img {

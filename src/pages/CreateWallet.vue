@@ -161,12 +161,14 @@ export default {
       }
     },
     checkPwd() {
+      this.prompt3 = true
       var regstr = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/;
       if (!regstr.test(this.inputPwd)) {
         this.prompt2 = true;
       } else {
         this.prompt2 = false;
       }
+      this.checkAgainPwd()
     },
     checkAgainPwd() {
       if (this.inputAgainPwd != this.inputPwd) {

@@ -19,7 +19,7 @@
       <li>
         <span v-text="$t('message.text30')">当前版本</span>
         <span class="edition">
-          <span v-text="$t('message.text701')">Beta</span>0.3.0
+          <span v-text="$t('message.text701')">Beta</span>1.0.0
         </span>
       </li>
       <li @click="toWebsite()">

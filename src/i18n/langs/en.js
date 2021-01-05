@@ -66,7 +66,7 @@ const en = {
         ,'text59' : 'Insufficient BHP balance'
         ,'text60' : 'Asset list'
         ,'text61' : 'The two passwords are not the same'
-        ,'text62' : 'name(1~12 characters)'
+        ,'text62' : 'Name(1~12 characters)'
         ,'text63' : 'Address'
         ,'text64' : 'Memo (Maximum 20 characters）'
         ,'text65' : 'Balance '

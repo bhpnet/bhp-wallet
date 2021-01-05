@@ -51,8 +51,8 @@
       </ul>
       <!-- <button @click="saveAddAddress()" v-text="$t('message.text7')">保存</button> -->
       <div class="bottomDiv">
-        <span @click="editShow = false">Cancel</span>
-        <span @click="saveAddAddress()">OK</span>
+        <span @click="addShow = false">{{$t('message.text69')}}</span>
+        <span @click="saveAddAddress()">{{$t('message.text68')}}</span>
       </div>
     </van-popup>
 
@@ -82,8 +82,8 @@
       </ul>
       <!-- <button  v-text="$t('message.text7')">保存</button> -->
       <div class="bottomDiv">
-        <span @click="editShow = false">Cancel</span>
-        <span @click="saveEditAddress()">OK</span>
+        <span @click="editShow = false">{{$t('message.text69')}}</span>
+        <span @click="saveEditAddress()">{{$t('message.text68')}}</span>
       </div>
     </van-popup>
   </div>
@@ -209,19 +209,21 @@ export default {
       });
     },
     saveAddAddress() {
-      this.addressList = JSON.parse(localStorage.getItem("addressList")) || [];
-      this.newAddressObject["addName"] = this.addName;
-      this.newAddressObject["addAddress"] = this.addAddress;
-      this.newAddressObject["addRemark"] = this.addRemark;
-      this.addressList = JSON.parse(localStorage.getItem("addressList")) || []; //||[]很重要
-      this.addressList.push(this.newAddressObject);
-      localStorage.setItem("addressList", JSON.stringify(this.addressList));
-      this.getAddressList();
-      this.addShow = false;
-      this.newAddressObject = {};
-      this.addName = "";
-      this.addAddress = "";
-      this.addRemark = "";
+      if (this.addAddress && this.addName) {
+        this.addressList = JSON.parse(localStorage.getItem("addressList")) || [];
+        this.newAddressObject["addName"] = this.addName;
+        this.newAddressObject["addAddress"] = this.addAddress;
+        this.newAddressObject["addRemark"] = this.addRemark;
+        this.addressList = JSON.parse(localStorage.getItem("addressList")) || []; //||[]很重要
+        this.addressList.push(this.newAddressObject);
+        localStorage.setItem("addressList", JSON.stringify(this.addressList));
+        this.getAddressList();
+        this.addShow = false;
+        this.newAddressObject = {};
+        this.addName = "";
+        this.addAddress = "";
+        this.addRemark = "";
+      }
     },
     EditAddress(v, i) {
       this.editName = v.addName;

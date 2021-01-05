@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       tab: "",
-      wgtVersion: "0.3.0",
+      wgtVersion: "1.0.0",
     };
   },
   created() {
