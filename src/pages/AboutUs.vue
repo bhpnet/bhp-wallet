@@ -1,7 +1,10 @@
 <template>
   <div class="aboutUs">
-    <img @click="clickReturn()" src="../assets/img/return1.png" alt />
-    <h2 style="font-weight:bold" v-text="$t('message.text26')">关于我们</h2>
+    <div class="top">
+      <img @click="clickReturn()" src="../assets/img/return1.png" alt />
+      <h2 style="font-weight: bold" v-text="$t('message.text26')">关于我们</h2>
+    </div>
+
     <img class="logo" src="../assets/img/BHP2Logo.png" alt />
     <ul>
       <li @click="toAgreement()">
@@ -59,8 +62,8 @@ export default {
       //   } else {
       this.$router.push("/policyEn");
       // }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -71,7 +74,11 @@ export default {
   justify-content: flex-start;
   align-items: flex-start;
   height: 100%;
-
+  .top {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
   img {
     width: 26px;
     height: 46px;
@@ -83,7 +90,7 @@ export default {
     font-weight: normal;
     color: #000;
     padding-left: 42px;
-    margin: 0 0 34px;
+    margin: 0;
   }
   .logo {
     padding: 0;

@@ -179,88 +179,49 @@ export function delete2(that, i) {
 export function surePWDPrivateKey(that) {
     try {
         if (that.walletType == "BHP") {
-            let sha256 = require("js-sha256").sha256
-            let key1 = sha256(that.pass)
-            key1 = Utils.encryptECB(key1, that.pass)
 
-            function fn3(num, length) {
-                return (num + Array(length).join('0')).slice(0, length);
-            }
-            let key2 = fn3(key1, 16)
-            let privateKey = Utils.decrypt(
+            let privateKey = Utils.decryptContent(
                 that.allWalletList[that.index].privateKey,
-                key2,
                 that.pass
             );
-            let address = that.allWalletList[that.index].address;
-            if (privateKey.indexOf(address) != -1) {
-                that.$store.commit(
-                    "getPrivateKey",
-                    privateKey.substr(address.length)
-                );
-                that.$router.push("/backUpPrivateKey1");
-            } else {
-                Toast.fail(that.msg);
-            }
+            that.$store.commit(
+                "getPrivateKey",
+                privateKey
+            );
+            that.$router.push("/backUpPrivateKey1");
             that.pass = "";
         } else if (that.walletType == "ETH") {
-            let sha256 = require("js-sha256").sha256
-            let key1 = sha256(that.pass)
-            key1 = Utils.encryptECB(key1, that.pass)
 
-            function fn3(num, length) {
-                return (num + Array(length).join('0')).slice(0, length);
-            }
-            let key2 = fn3(key1, 16)
-            let privateKey = Utils.decrypt(
+            let privateKey = Utils.decryptContent(
                 that.allWalletListETH[that.index].privateKey,
-                key2,
                 that.pass
             );
-            let address = that.allWalletListETH[that.index].address;
-            if (privateKey.indexOf(address) != -1) {
-                that.$store.commit(
-                    "getPrivateKey",
-                    privateKey.substr(address.length + 2)
-                );
-                that.$router.push("/backUpPrivateKey1");
-            } else {
-                Toast.fail(that.msg);
-            }
+            that.$store.commit(
+                "getPrivateKey",
+                privateKey.substr(2)
+            );
+            that.$router.push("/backUpPrivateKey1");
             that.pass = "";
         } else if (that.walletType == "BTC") {
-            let sha256 = require("js-sha256").sha256
-            let key1 = sha256(that.pass)
-            key1 = Utils.encryptECB(key1, that.pass)
 
-            function fn3(num, length) {
-                return (num + Array(length).join('0')).slice(0, length);
-            }
-            let key2 = fn3(key1, 16)
-            let privateKey = Utils.decrypt(
+            let privateKey = Utils.decryptContent(
                 that.allWalletListBTC[that.index].privateKey,
-                key2,
                 that.pass
             );
-            let address = that.allWalletListBTC[that.index].address;
-            if (privateKey.indexOf(address) != -1) {
-                that.$store.commit(
-                    "getPrivateKey",
-                    privateKey.substr(address.length)
-                );
-                that.$router.push({
-                    path: "/backUpPrivateKey1", //看去钱包主页，还是跳转去详情页面
-                    query: {
-                        exportBTC: 'WIF',
-                    },
-                });
-            } else {
-                Toast.fail(that.msg);
-            }
+            that.$store.commit(
+                "getPrivateKey",
+                privateKey
+            );
+            that.$router.push({
+                path: "/backUpPrivateKey1", //看去钱包主页，还是跳转去详情页面
+                query: {
+                    exportBTC: 'WIF',
+                },
+            });
             that.pass = "";
         }
     } catch (err) {
-        Toast.fail(that.msg);
+        Toast.fail(err);
         that.pass = "";
     }
 
@@ -269,36 +230,20 @@ export function surePWDPrivateKey(that) {
 export function surePWDMnemonic(that, i) {
     that.$store.commit("getWalletType", ""); //备份助记词状态清空
     try {
-
         if (that.walletType == "BHP") {
             if (that.allWalletList[that.index].phrase) {
-                let sha256 = require("js-sha256").sha256
-                let key1 = sha256(that.pass)
-                key1 = Utils.encryptECB(key1, that.pass)
-
-                function fn3(num, length) {
-                    return (num + Array(length).join('0')).slice(0, length);
-                }
-                let key2 = fn3(key1, 16)
-                let phrase = Utils.decrypt(
+                let phrase = Utils.decryptContent(
                     that.allWalletList[that.index].phrase,
-                    key2,
                     that.pass
                 );
-                let address = that.allWalletList[that.index].address;
-                if (phrase.indexOf(address) != -1) {
-                    phrase = phrase.substr(address.length);
-                    that.$store.commit("getBipList", phrase.split(" "));
-                    that.$router.push({
-                        path: "/backUp1",
-                        query: {
-                            backUpBip: "backUpBip"
-                        }
-                    });
-                } else {
-                    Toast.fail(that.msg);
-                    that.pass = "";
-                }
+                that.$store.commit("getBipList", phrase.split(" "));
+                that.$router.push({
+                    path: "/backUp1",
+                    query: {
+                        backUpBip: "backUpBip"
+                    }
+                });
+                that.pass = "";
             } else {
                 that.pass = "";
                 that.show2 = false
@@ -307,33 +252,19 @@ export function surePWDMnemonic(that, i) {
 
         } else if (that.walletType == "BHP2") {
             if (that.allWalletList2[that.index].phrase) {
-                let sha256 = require("js-sha256").sha256
-                let key1 = sha256(that.pass)
-                key1 = Utils.encryptECB(key1, that.pass)
 
-                function fn3(num, length) {
-                    return (num + Array(length).join('0')).slice(0, length);
-                }
-                let key2 = fn3(key1, 16)//K2是根据客户输的K1密码 双加密，并取16字符得来的
-                let phrase = Utils.decrypt(
+                let phrase = Utils.decryptContent(
                     that.allWalletList2[that.index].phrase,
-                    key2,//以前Key2是写死的，密码不管输什么都会解密一段字符出来，不会报错，现在 key2和that.pass都输错 代码就会报错，
                     that.pass
                 );
-                let address = that.allWalletList2[that.index].address;
-                if (phrase.indexOf(address) != -1) {
-                    phrase = phrase.substr(address.length);
-                    that.$store.commit("getBipList", phrase.split(" "));
-                    that.$router.push({
-                        path: "/backUp1",
-                        query: {
-                            backUpBip: "backUpBip"
-                        }
-                    });
-                } else {
-                    Toast.fail(that.msg);
-                    that.pass = "";
-                }
+
+                that.$store.commit("getBipList", phrase.split(" "));
+                that.$router.push({
+                    path: "/backUp1",
+                    query: {
+                        backUpBip: "backUpBip"
+                    }
+                });
             } else {
                 that.pass = "";
                 that.show2 = false
@@ -341,33 +272,19 @@ export function surePWDMnemonic(that, i) {
             }
         } else if (that.walletType == "FIL") {
             if (that.allWalletListFIL[that.index].phrase) {
-                let sha256 = require("js-sha256").sha256
-                let key1 = sha256(that.pass)
-                key1 = Utils.encryptECB(key1, that.pass)
 
-                function fn3(num, length) {
-                    return (num + Array(length).join('0')).slice(0, length);
-                }
-                let key2 = fn3(key1, 16)
-                let phrase = Utils.decrypt(
+                let phrase = Utils.decryptContent(
                     that.allWalletListFIL[that.index].phrase,
-                    key2,
                     that.pass
                 );
-                let address = that.allWalletListFIL[that.index].address;
-                if (phrase.indexOf(address) != -1) {
-                    phrase = phrase.substr(address.length);
-                    that.$store.commit("getBipList", phrase.split(" "));
-                    that.$router.push({
-                        path: "/backUp1",
-                        query: {
-                            backUpBip: "backUpBip"
-                        }
-                    });
-                } else {
-                    Toast.fail(that.msg);
-                    that.pass = "";
-                }
+                that.$store.commit("getBipList", phrase.split(" "));
+                that.$router.push({
+                    path: "/backUp1",
+                    query: {
+                        backUpBip: "backUpBip"
+                    }
+                });
+
             } else {
                 that.pass = "";
                 that.show2 = false
@@ -375,34 +292,20 @@ export function surePWDMnemonic(that, i) {
             }
         } else if (that.walletType == "ETH") {
             if (that.allWalletListETH[that.index].phrase) {
-                let sha256 = require("js-sha256").sha256
-                let key1 = sha256(that.pass)
-                key1 = Utils.encryptECB(key1, that.pass)
 
-                function fn3(num, length) {
-                    return (num + Array(length).join('0')).slice(0, length);
-                }
-                let key2 = fn3(key1, 16)
-                let phrase = Utils.decrypt(
+                let phrase = Utils.decryptContent(
                     that.allWalletListETH[that.index].phrase,
-                    key2,
                     that.pass
                 );
-                let address = that.allWalletListETH[that.index].address;
 
-                if (phrase.indexOf(address) != -1) {
-                    phrase = phrase.substr(address.length);
-                    that.$store.commit("getBipList", phrase.split(" "));
-                    that.$router.push({
-                        path: "/backUp1",
-                        query: {
-                            backUpBip: "backUpBip"
-                        }
-                    });
-                } else {
-                    Toast.fail(that.msg);
-                    that.pass = "";
-                }
+                that.$store.commit("getBipList", phrase.split(" "));
+                that.$router.push({
+                    path: "/backUp1",
+                    query: {
+                        backUpBip: "backUpBip"
+                    }
+                });
+
             } else {
                 that.pass = "";
                 that.show2 = false
@@ -410,34 +313,19 @@ export function surePWDMnemonic(that, i) {
             }
         } else if (that.walletType == "BTC") {
             if (that.allWalletListBTC[that.index].phrase) {
-                let sha256 = require("js-sha256").sha256
-                let key1 = sha256(that.pass)
-                key1 = Utils.encryptECB(key1, that.pass)
 
-                function fn3(num, length) {
-                    return (num + Array(length).join('0')).slice(0, length);
-                }
-                let key2 = fn3(key1, 16)
-                let phrase = Utils.decrypt(
+                let phrase = Utils.decryptContent(
                     that.allWalletListBTC[that.index].phrase,
-                    key2,
                     that.pass
                 );
-                let address = that.allWalletListBTC[that.index].address;
 
-                if (phrase.indexOf(address) != -1) {
-                    phrase = phrase.substr(address.length);
-                    that.$store.commit("getBipList", phrase.split(" "));
-                    that.$router.push({
-                        path: "/backUp1",
-                        query: {
-                            backUpBip: "backUpBip"
-                        }
-                    });
-                } else {
-                    Toast.fail(that.msg);
-                    that.pass = "";
-                }
+                that.$store.commit("getBipList", phrase.split(" "));
+                that.$router.push({
+                    path: "/backUp1",
+                    query: {
+                        backUpBip: "backUpBip"
+                    }
+                });
             } else {
                 that.pass = "";
                 that.show2 = false

@@ -240,8 +240,7 @@ body,
   }
 
  .content {
-    margin-top: 80px;
-    height: 80px;
+    margin-top: 90px;
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     padding: 0 120px;
@@ -249,7 +248,7 @@ body,
     height: 240px;
     overflow-y: scroll;
     word-break: break-all;
-    overflow: hidden scroll;
+    overflow: hidden scroll; 
     p {
     font-size: 20px;
     line-height: 28px;

@@ -52,23 +52,15 @@ export async function clickNext(that) {
                         privateKey: Bytes2Str(keyPair.privateKey),
                         publicKey: Bytes2Str(keyPair.publicKey)
                     };
-                    let sha256 = require("js-sha256").sha256
-                    let key1 = sha256(that.inputPwd)
-                    key1 = Utils.encryptECB(key1, that.inputPwd)
 
-                    function fn3(num, length) {
-                        return (num + Array(length).join('0')).slice(0, length);
-                    }
-                    let key2 = fn3(key1, 16)
-                    let phrase = Utils.encrypt(
-                        account.address + account.phrase,
-                        key2,
+
+                    let phrase = Utils.encryptContent(
+                        account.phrase,
                         that.inputPwd
                     );
                     account.phrase = phrase;
-                    let privateKey = Utils.encrypt(
-                        account.address + account.privateKey,
-                        key2,
+                    let privateKey = Utils.encryptContent(
+                        account.privateKey,
                         that.inputPwd
                     );
                     account.name = that.inputName;
@@ -120,22 +112,14 @@ export async function clickNext(that) {
                     let acct = new Bhp.wallet.Account(key); //1.0不会生成助记词
                     that.createWalletObj["address"] = acct._address;
                     that.createWalletObj["name"] = that.inputName;
-                    let sha256 = require("js-sha256").sha256
-                    let key1 = sha256(that.inputPwd)
-                    key1 = Utils.encryptECB(key1, that.inputPwd)
 
-                    function fn3(num, length) {
-                        return (num + Array(length).join('0')).slice(0, length);
-                    }
-                    let key2 = fn3(key1, 16)
-                    that.createWalletObj["privateKey"] = Utils.encrypt(
-                        acct._address + acct._privateKey,
-                        key2,
+
+                    that.createWalletObj["privateKey"] = Utils.encryptContent(
+                        acct._privateKey,
                         that.inputPwd
                     );
-                    that.createWalletObj["phrase"] = Utils.encrypt(
-                        acct._address + that.inputMnemonic,
-                        key2,
+                    that.createWalletObj["phrase"] = Utils.encryptContent(
+                        that.inputMnemonic,
                         that.inputPwd
                     );
                     that.accounts =
@@ -183,23 +167,15 @@ export async function clickNext(that) {
                     that.createWalletObj["name"] = that.inputName;
                     that.createWalletObj["phrase"] = accountETH.mnemonic.phrase;
                     that.createWalletObj["privateKey"] = accountETH.privateKey;
-                    let sha256 = require("js-sha256").sha256
-                    let key1 = sha256(that.inputPwd)
-                    key1 = Utils.encryptECB(key1, that.inputPwd)
 
-                    function fn3(num, length) {
-                        return (num + Array(length).join('0')).slice(0, length);
-                    }
-                    let key2 = fn3(key1, 16)
-                    let phrase = Utils.encrypt(
-                        accountETH.address + that.createWalletObj["phrase"],
-                        key2,
+
+                    let phrase = Utils.encryptContent(
+                        that.createWalletObj["phrase"],
                         that.inputPwd
                     );
                     that.createWalletObj["phrase"] = phrase;
-                    let privateKey = Utils.encrypt(
-                        accountETH.address + that.createWalletObj["privateKey"],
-                        key2,
+                    let privateKey = Utils.encryptContent(
+                        that.createWalletObj["privateKey"],
                         that.inputPwd
                     );
                     that.createWalletObj["privateKey"] = privateKey;
@@ -266,23 +242,15 @@ export async function clickNext(that) {
 
                     that.createWalletObj["address"] = myAddress;
                     that.createWalletObj["name"] = that.inputName;
-                    let sha256 = require("js-sha256").sha256
-                    let key1 = sha256(that.inputPwd)
-                    key1 = Utils.encryptECB(key1, that.inputPwd)
 
-                    function fn3(num, length) {
-                        return (num + Array(length).join('0')).slice(0, length);
-                    }
-                    let key2 = fn3(key1, 16)
-                    let phrase = Utils.encrypt(
-                        myAddress + that.inputMnemonic,
-                        key2,
+
+                    let phrase = Utils.encryptContent(
+                        that.inputMnemonic,
                         that.inputPwd
                     );
                     that.createWalletObj["phrase"] = phrase;
-                    let privateKey = Utils.encrypt(
-                        myAddress + MyPrivateKey,
-                        key2,
+                    let privateKey = Utils.encryptContent(
+                        MyPrivateKey,
                         that.inputPwd
                     );
                     that.createWalletObj["privateKey"] = privateKey;
@@ -340,22 +308,14 @@ export async function clickNext(that) {
 
                     that.createWalletObj["address"] = p2wpkh.address;
                     that.createWalletObj["name"] = that.inputName;
-                    let sha256 = require("js-sha256").sha256
-                    let key1 = sha256(that.inputPwd)
-                    key1 = Utils.encryptECB(key1, that.inputPwd)
 
-                    function fn3(num, length) {
-                        return (num + Array(length).join('0')).slice(0, length);
-                    }
-                    let key2 = fn3(key1, 16)
-                    that.createWalletObj["privateKey"] = Utils.encrypt(
-                        p2wpkh.address + wif,
-                        key2,
+
+                    that.createWalletObj["privateKey"] = Utils.encryptContent(
+                        wif,
                         that.inputPwd
                     );
-                    that.createWalletObj["phrase"] = Utils.encrypt(
-                        p2wpkh.address + that.inputMnemonic,
-                        key2,
+                    that.createWalletObj["phrase"] = Utils.encryptContent(
+                        that.inputMnemonic,
                         that.inputPwd
                     );
 
@@ -424,113 +384,43 @@ export async function clickNext(that) {
             if (that.leadPrivateKey) {
                 that.leadPrivateKey = that.leadPrivateKey.replace(/(^\s*)|(\s*$)/g, "") //去两边空格
                 try {
-                if (that.$route.query.leadWallet == "leadWallet2") {
-                    //=========暂无此功能
-                }
-                if (that.$route.query.leadWallet == "leadWalletFIL") {
-                    //=========暂无此功能
-                } else if (that.$route.query.leadWallet == "leadWallet1") {
-                    //导入钱包1.0页面跳转过来的
-                    //钱包1.0导入
-
-                    let acct = new Bhp.wallet.Account(that.leadPrivateKey); //1.0不会生成助记词
-                    that.createWalletObj["address"] = acct._address;
-                    that.createWalletObj["name"] = that.inputName;
-                    let sha256 = require("js-sha256").sha256
-                    let key1 = sha256(that.inputPwd)
-                    key1 = Utils.encryptECB(key1, that.inputPwd)
-
-                    function fn3(num, length) {
-                        return (num + Array(length).join('0')).slice(0, length);
+                    if (that.$route.query.leadWallet == "leadWallet2") {
+                        //=========暂无此功能
                     }
-                    let key2 = fn3(key1, 16)
-                    that.createWalletObj["privateKey"] = Utils.encrypt(
-                        acct._address + acct._privateKey,
-                        key2,
-                        that.inputPwd
-                    );
+                    if (that.$route.query.leadWallet == "leadWalletFIL") {
+                        //=========暂无此功能
+                    } else if (that.$route.query.leadWallet == "leadWallet1") {
+                        //导入钱包1.0页面跳转过来的
+                        //钱包1.0导入
 
-                    that.accounts =
-                        JSON.parse(localStorage.getItem("accounts")) || []; //||[]很重要
-                    //去除地址重复的
-                    for (let i in that.accounts) {
-                        if (that.accounts[i].address == acct._address) {
-                            that.flag1 = true;
-                            if (confirm(that.msg1)) {
-                                that.accounts.splice(i, 1);
-                                that.accounts.push(that.createWalletObj);
-                                localStorage.setItem(
-                                    "accounts",
-                                    JSON.stringify(that.accounts)
-                                );
-                                that.$store.commit("getWalletType", "BHP"); //新导入的钱包进入首页显示新创建的钱包
-                                that.$router.replace({
-                                    path: "/indexHome/myWallet",
-                                    query: {
-                                        address1: that.createWalletObj.address
-                                    }
-                                });
-                            } else {
-                                that.$router.go(0);
-                            }
-                        }
-                    }
-
-                    //进入确认导入页面
-                    if (!that.flag1) {
-                        that.$store.commit("getNewLeadWallet", that.createWalletObj);
-
-                        that.$router.push({
-                            path: "/sureLeadWallet",
-                            query: {
-                                address1: acct._address
-                            }
-                        });
-                    }
-                } else if (that.$route.query.leadWallet == "leadWalletETH") {
-                    if (that.leadPrivateKey.length == 64 || that.leadPrivateKey.length == 66) { //0x10~0x19可以导入钱包
-
-                        if (that.leadPrivateKey.substr(0, 2) != "0x") {
-                            that.leadPrivateKey = "0x" + that.leadPrivateKey;
-                        }
-                        //要有0x才可以成功导入ETH钱包
-                        var accountETH = new ethers.Wallet(that.leadPrivateKey);
-                        that.createWalletObj["address"] = accountETH.address;
+                        let acct = new Bhp.wallet.Account(that.leadPrivateKey); //1.0不会生成助记词
+                        that.createWalletObj["address"] = acct._address;
                         that.createWalletObj["name"] = that.inputName;
-                        that.createWalletObj["privateKey"] = accountETH.privateKey;
-                        let sha256 = require("js-sha256").sha256
-                    let key1 = sha256(that.inputPwd)
-                    key1 = Utils.encryptECB(key1, that.inputPwd)
 
-                    function fn3(num, length) {
-                        return (num + Array(length).join('0')).slice(0, length);
-                    }
-                    let key2 = fn3(key1, 16)
-                        let privateKey = Utils.encrypt(
-                            accountETH.address + that.createWalletObj["privateKey"],
-                            key2,
+
+                        that.createWalletObj["privateKey"] = Utils.encryptContent(
+                            acct._privateKey,
                             that.inputPwd
                         );
-                        that.createWalletObj["privateKey"] = privateKey;
-                        that.accounts =
-                            JSON.parse(localStorage.getItem("accountsETH")) || []; //||[]很重要
 
+                        that.accounts =
+                            JSON.parse(localStorage.getItem("accounts")) || []; //||[]很重要
                         //去除地址重复的
                         for (let i in that.accounts) {
-                            if (that.accounts[i].address == accountETH.address) {
+                            if (that.accounts[i].address == acct._address) {
                                 that.flag1 = true;
                                 if (confirm(that.msg1)) {
                                     that.accounts.splice(i, 1);
                                     that.accounts.push(that.createWalletObj);
                                     localStorage.setItem(
-                                        "accountsETH",
+                                        "accounts",
                                         JSON.stringify(that.accounts)
                                     );
-                                    that.$store.commit("getWalletType", "ETH"); //新导入的钱包进入首页显示新创建的钱包
+                                    that.$store.commit("getWalletType", "BHP"); //新导入的钱包进入首页显示新创建的钱包
                                     that.$router.replace({
                                         path: "/indexHome/myWallet",
                                         query: {
-                                            addressETH: accountETH.address
+                                            address1: that.createWalletObj.address
                                         }
                                     });
                                 } else {
@@ -538,86 +428,134 @@ export async function clickNext(that) {
                                 }
                             }
                         }
+
+                        //进入确认导入页面
+                        if (!that.flag1) {
+                            that.$store.commit("getNewLeadWallet", that.createWalletObj);
+
+                            that.$router.push({
+                                path: "/sureLeadWallet",
+                                query: {
+                                    address1: acct._address
+                                }
+                            });
+                        }
+                    } else if (that.$route.query.leadWallet == "leadWalletETH") {
+                        if (that.leadPrivateKey.length == 64 || that.leadPrivateKey.length == 66) { //0x10~0x19可以导入钱包
+
+                            if (that.leadPrivateKey.substr(0, 2) != "0x") {
+                                that.leadPrivateKey = "0x" + that.leadPrivateKey;
+                            }
+                            //要有0x才可以成功导入ETH钱包
+                            var accountETH = new ethers.Wallet(that.leadPrivateKey);
+                            that.createWalletObj["address"] = accountETH.address;
+                            that.createWalletObj["name"] = that.inputName;
+                            that.createWalletObj["privateKey"] = accountETH.privateKey;
+
+
+                            let privateKey = Utils.encryptContent(
+                                that.createWalletObj["privateKey"],
+                                that.inputPwd
+                            );
+                            that.createWalletObj["privateKey"] = privateKey;
+                            that.accounts =
+                                JSON.parse(localStorage.getItem("accountsETH")) || []; //||[]很重要
+
+                            //去除地址重复的
+                            for (let i in that.accounts) {
+                                if (that.accounts[i].address == accountETH.address) {
+                                    that.flag1 = true;
+                                    if (confirm(that.msg1)) {
+                                        that.accounts.splice(i, 1);
+                                        that.accounts.push(that.createWalletObj);
+                                        localStorage.setItem(
+                                            "accountsETH",
+                                            JSON.stringify(that.accounts)
+                                        );
+                                        that.$store.commit("getWalletType", "ETH"); //新导入的钱包进入首页显示新创建的钱包
+                                        that.$router.replace({
+                                            path: "/indexHome/myWallet",
+                                            query: {
+                                                addressETH: accountETH.address
+                                            }
+                                        });
+                                    } else {
+                                        that.$router.go(0);
+                                    }
+                                }
+                            }
+                            //进入确认导入页面
+                            if (!that.flag1) {
+                                that.$store.commit("getNewLeadWallet", that.createWalletObj);
+                                that.$router.push({
+                                    path: "/sureLeadWallet",
+                                    query: {
+                                        addressETH: accountETH.address
+                                    }
+                                });
+                            }
+                        } else {
+                            Toast.fail(that.msg5);
+
+                        }
+
+                    } else if (that.$route.query.leadWallet == "leadWalletBTC") {
+                        const network = bitcoin.networks.bitcoin;
+                        // SW
+                        const keyPair = bitcoin.ECPair.fromWIF(
+                            that.leadPrivateKey, network
+                        );
+                        const p2wpkh = bitcoin.payments.p2sh({
+                            redeem: bitcoin.payments.p2wpkh({
+                                pubkey: keyPair.publicKey,
+                                network: network
+                            })
+                        });
+                        that.createWalletObj["address"] = p2wpkh.address;
+                        that.createWalletObj["name"] = that.inputName;
+
+                        that.createWalletObj["privateKey"] = Utils.encryptContent(
+                            that.leadPrivateKey,
+                            that.inputPwd
+                        );
+                        that.accounts =
+                            JSON.parse(localStorage.getItem("accountsBTC")) || []; //||[]很重要
+
+                        //去除地址重复的
+                        for (let i in that.accounts) {
+                            if (that.accounts[i].address == p2wpkh.address) {
+                                that.flag1 = true;
+                                if (confirm(that.msg1)) {
+                                    that.accounts.splice(i, 1);
+                                    that.accounts.push(that.createWalletObj);
+                                    localStorage.setItem(
+                                        "accountsBTC",
+                                        JSON.stringify(that.accounts)
+                                    );
+                                    that.$store.commit("getWalletType", "BTC"); //新导入的钱包进入首页显示新创建的钱包
+                                    that.$router.replace({
+                                        path: "/indexHome/myWallet",
+                                        query: {
+                                            addressBTC: p2wpkh.address
+                                        }
+                                    });
+                                } else {
+                                    that.$router.go(0);
+                                }
+                            }
+                        }
+
                         //进入确认导入页面
                         if (!that.flag1) {
                             that.$store.commit("getNewLeadWallet", that.createWalletObj);
                             that.$router.push({
                                 path: "/sureLeadWallet",
                                 query: {
-                                    addressETH: accountETH.address
+                                    addressBTC: p2wpkh.address
                                 }
                             });
                         }
-                    } else {
-                        Toast.fail(that.msg5);
-
                     }
-
-                } else if (that.$route.query.leadWallet == "leadWalletBTC") {
-                    const network = bitcoin.networks.bitcoin;
-                    // SW
-                    const keyPair = bitcoin.ECPair.fromWIF(
-                        that.leadPrivateKey, network
-                    );
-                    const p2wpkh = bitcoin.payments.p2sh({
-                        redeem: bitcoin.payments.p2wpkh({
-                            pubkey: keyPair.publicKey,
-                            network: network
-                        })
-                    });
-                    that.createWalletObj["address"] = p2wpkh.address;
-                    that.createWalletObj["name"] = that.inputName;
-                    let sha256 = require("js-sha256").sha256
-                    let key1 = sha256(that.inputPwd)
-                    key1 = Utils.encryptECB(key1, that.inputPwd)
-
-                    function fn3(num, length) {
-                        return (num + Array(length).join('0')).slice(0, length);
-                    }
-                    let key2 = fn3(key1, 16)
-                    that.createWalletObj["privateKey"] = Utils.encrypt(
-                        p2wpkh.address + that.leadPrivateKey,
-                        key2,
-                        that.inputPwd
-                    );
-                    that.accounts =
-                        JSON.parse(localStorage.getItem("accountsBTC")) || []; //||[]很重要
-
-                    //去除地址重复的
-                    for (let i in that.accounts) {
-                        if (that.accounts[i].address == p2wpkh.address) {
-                            that.flag1 = true;
-                            if (confirm(that.msg1)) {
-                                that.accounts.splice(i, 1);
-                                that.accounts.push(that.createWalletObj);
-                                localStorage.setItem(
-                                    "accountsBTC",
-                                    JSON.stringify(that.accounts)
-                                );
-                                that.$store.commit("getWalletType", "BTC"); //新导入的钱包进入首页显示新创建的钱包
-                                that.$router.replace({
-                                    path: "/indexHome/myWallet",
-                                    query: {
-                                        addressBTC: p2wpkh.address
-                                    }
-                                });
-                            } else {
-                                that.$router.go(0);
-                            }
-                        }
-                    }
-
-                    //进入确认导入页面
-                    if (!that.flag1) {
-                        that.$store.commit("getNewLeadWallet", that.createWalletObj);
-                        that.$router.push({
-                            path: "/sureLeadWallet",
-                            query: {
-                                addressBTC: p2wpkh.address
-                            }
-                        });
-                    }
-                }
 
                 } catch (err) {
                     Toast.fail(that.msg5);

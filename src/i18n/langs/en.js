@@ -130,6 +130,7 @@ const en = {
         ,'text120' : 'Please select the mnemonics in the correct order to confirm that your mnemonics have been backed up.'
         ,'text121' : 'BHP Wallet does not store your mnemonic, so if it is lost, BHP Wallet cannot help you to retrieve it.'
         ,'text122' : 'Please copy the following mnemonics in order on a piece of paper and keep it in a safe place.'
+        ,'text123' : 'For the security of your funds, it is recommended that you use the system keyboard. Third party keypads collect your private keys and mnemonics which may result in the loss of your assets.'
 
     },
     // ...enLocale

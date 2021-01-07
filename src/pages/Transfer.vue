@@ -602,7 +602,6 @@ export default {
       this.msg2 = "Password error!";
       this.msg3 = "Please enter the correct address!";
       this.msg4 = "Transaction error!";
-
     }
     if (!navigator.onLine) {
       Toast.fail(this.msg);
@@ -891,17 +890,8 @@ export default {
 
     MakeTransaction1() {
       var that = this;
-      let sha256 = require("js-sha256").sha256;
-      let key1 = sha256(this.password);
-      key1 = Utils.encryptECB(key1, this.password);
-
-      function fn3(num, length) {
-        return (num + Array(length).join("0")).slice(0, length);
-      }
-      let key2 = fn3(key1, 16);
-      let privateKey = Utils.decrypt(this.privateKey, key2, this.password);
-      if (privateKey.indexOf(this.localAddress) != -1) {
-        privateKey = privateKey.substr(this.localAddress.length);
+      let privateKey = Utils.decryptContent(this.privateKey, this.password);
+     
         for (let i in this.unspent) {
           var input = {
             //交易输入
@@ -945,24 +935,12 @@ export default {
             this.password = "";
             this.loading = false;
           });
-      } else {
-        Toast.fail(this.msg2);
-      }
       this.password = "";
     },
     //BTC转账
     MakeTransactionBTC() {
-      let sha256 = require("js-sha256").sha256;
-      let key1 = sha256(this.password);
-      key1 = Utils.encryptECB(key1, this.password);
+      let privateKey = Utils.decryptContent(this.privateKey, this.password);
 
-      function fn3(num, length) {
-        return (num + Array(length).join("0")).slice(0, length);
-      }
-      let key2 = fn3(key1, 16);
-      let privateKey = Utils.decrypt(this.privateKey, key2, this.password);
-      if (privateKey.indexOf(this.localAddress) != -1) {
-        privateKey = privateKey.substr(this.localAddress.length);
         var previousTransaction = {
           tx: [],
         };
@@ -1008,9 +986,6 @@ export default {
             this.password = "";
             this.loading = false;
           });
-      } else {
-        Toast.fail(this.msg2);
-      }
       this.password = "";
     },
     btcToSatoshi(btcAmount) {
@@ -1059,17 +1034,9 @@ export default {
     //FIL转账
     async MakeTransactionFIL() {
       const { MnemonicWalletProvider, HttpJsonRpcConnector } = require("filecoin.js");
-      let sha256 = require("js-sha256").sha256;
-      let key1 = sha256(this.password);
-      key1 = Utils.encryptECB(key1, this.password);
 
-      function fn3(num, length) {
-        return (num + Array(length).join("0")).slice(0, length);
-      }
-      let key2 = fn3(key1, 16);
-      let phrase = Utils.decrypt(this.phrase, key2, this.password);
-      if (phrase.indexOf(this.localAddress) != -1) {
-        phrase = phrase.substr(this.localAddress.length);
+      let phrase = Utils.decryptContent(this.phrase, this.password);
+      
         const connector = new HttpJsonRpcConnector({
           url: "api/rpc/v0",
           token:
@@ -1114,9 +1081,8 @@ export default {
             this.password = "";
             this.loading = false;
           });
-      } else {
-        Toast.fail(this.msg2);
-      }
+      this.password = "";
+
     },
     //2.0转账
     MakeTransaction2() {
@@ -1124,18 +1090,9 @@ export default {
       let crypto = Bhpnet.getCrypto("cosmos");
       let fees = { denom: "abhp", amount: 600000 };
       let gas = 200000;
-      let sha256 = require("js-sha256").sha256;
-      let key1 = sha256(this.password);
-      key1 = Utils.encryptECB(key1, this.password);
 
-      function fn3(num, length) {
-        return (num + Array(length).join("0")).slice(0, length);
-      }
-      let key2 = fn3(key1, 16);
-      let privateKey = Utils.decrypt(this.privateKey, key2, this.password);
+      let privateKey = Utils.decryptContent(this.privateKey, this.password);
 
-      if (privateKey.indexOf(this.localAddress) != -1) {
-        privateKey = privateKey.substr(this.localAddress.length);
         let builder = Bhpnet.getBuilder("cosmos");
         let tx = {
           chain_id: "testing",
@@ -1177,33 +1134,22 @@ export default {
             this.password = "";
             this.loading = false;
           });
-      } else {
-        Toast.fail(this.msg2);
-      }
       this.password = "";
     },
     //ETH转账
     async MakeTransactionETH() {
       var that = this;
-      let sha256 = require("js-sha256").sha256;
-      let key1 = sha256(this.password);
-      key1 = Utils.encryptECB(key1, this.password);
-      function fn3(num, length) {
-        return (num + Array(length).join("0")).slice(0, length);
-      }
-      let key2 = fn3(key1, 16);
       let flog = true;
 
-      try {// 在this.MakeTransactionETH()调用外写也要报错，要在这里写try
-        var privateKey = Utils.decrypt(this.privateKey, key2, this.password);
+      try {
+        // 在this.MakeTransactionETH()调用外写也要报错，要在这里写try
+        var privateKey = Utils.decryptContent(this.privateKey, this.password);
       } catch (err) {
         Toast.fail(this.msg2);
         this.password = "";
         flog = false;
       }
       if (flog) {
-        if (privateKey.indexOf(this.localAddress) != -1) {
-          privateKey = privateKey.substr(this.localAddress.length);
           that.loading = true;
           if (that.selectValue == "ETH") {
             let wallet = new ethers.Wallet(privateKey); //用私钥导入的没有助记词
@@ -1252,9 +1198,6 @@ export default {
               }
             }
           }
-        } else {
-          Toast.fail(this.msg2);
-        }
         this.password = "";
       }
     },
@@ -1368,7 +1311,8 @@ export default {
           //1.0地址输错，转账方法不会报错，就先校验地址。2.0输错地址，方法会报错，除了密码错误，就只会是地址错误
           // console.log(res.data.result.isvalid);
           if (res.data.result.isvalid) {
-            try {//解密密码输出会报错
+            try {
+              //解密密码输出会报错
               //1.0转账方法
               this.MakeTransaction1();
             } catch (err) {
@@ -1423,22 +1367,26 @@ export default {
         }
       } else if (this.$route.query.addressBTC) {
         axios
-          .get("https://api.blockcypher.com/v1/btc/main/addrs/" + this.inputAddress + "/balance")
+          .get(
+            "https://api.blockcypher.com/v1/btc/main/addrs/" +
+              this.inputAddress +
+              "/balance"
+          )
           .then((res) => {
             console.log(res);
-              try {
-                this.MakeTransactionBTC();
-              } catch (err) {
-                this.loading = false;
-                Toast.fail(this.msg2);
-                this.password = "";
-              }
-            
-          }).catch(err=>{
-            console.log(err)
+            try {
+              this.MakeTransactionBTC();
+            } catch (err) {
+              this.loading = false;
+              Toast.fail(this.msg2);
+              this.password = "";
+            }
+          })
+          .catch((err) => {
+            console.log(err);
             Toast.fail(this.msg3);
             this.password = "";
-          })
+          });
       }
     },
     toAddressList() {

@@ -4,27 +4,59 @@
       <van-loading color="#1989fa" class="loadImg" />
     </div>
     <img @click="clickReturn()" src="../assets/img/return1.png" alt />
-    <h2 style="font-weight:bold" v-text="$t('message.text17')">导入钱包</h2>
+    <h2 style="font-weight: bold" v-text="$t('message.text17')">导入钱包</h2>
     <div class="mnemonicSpan">
       <span
         v-show="BHP2Hide"
-        :class="spanActive=='leadPrivateKey'?'spanActive':''"
+        :class="spanActive == 'leadPrivateKey' ? 'spanActive' : ''"
         @click="tabActive('leadPrivateKey')"
         v-text="$t('message.text83')"
-      >PrivateKey</span>
+        >PrivateKey</span
+      >
       <span
-        :class="spanActive=='助记词'?'spanActive':''"
+        :class="spanActive == '助记词' ? 'spanActive' : ''"
         @click="tabActive('助记词')"
         v-text="$t('message.text18')"
-      >助记词</span>
+        >助记词</span
+      >
     </div>
     <div class="mnemonicWords" v-show="!WordsOrkeystore">
-      <textarea class="tarea" @input="toFocusWords()"  v-model="inputMnemonic" :placeholder="$t('message.text108')"></textarea>
-      <input class="passwordInput" ref="hideInputWords" type="password" v-model="inputMnemonic" :placeholder="$t('message.text108')">
+      <textarea
+        class="tarea"
+        @input="toFocusWords()"
+        v-model="inputMnemonic"
+        :placeholder="$t('message.text108')"
+      ></textarea>
+      <input
+        class="passwordInput"
+        ref="hideInputWords"
+        type="password"
+        v-model="inputMnemonic"
+        :placeholder="$t('message.text108')"
+      />
     </div>
     <div class="mnemonicWords leadPrivateKey" v-show="WordsOrkeystore">
-      <textarea class="tarea" @input="toFocusKey()"  v-model="leadPrivateKey" :placeholder="$route.query.leadWallet=='leadWalletBTC'?$t('message.text84'):$t('message.text844')"></textarea>
-      <input class="passwordInput" ref="hideInputKey" type="password" v-model="leadPrivateKey" :placeholder="$route.query.leadWallet=='leadWalletBTC'?$t('message.text84'):$t('message.text844')">
+      <textarea
+        class="tarea"
+        @input="toFocusKey()"
+        v-model="leadPrivateKey"
+        :placeholder="
+          $route.query.leadWallet == 'leadWalletBTC'
+            ? $t('message.text84')
+            : $t('message.text844')
+        "
+      ></textarea>
+      <input
+        class="passwordInput"
+        ref="hideInputKey"
+        type="password"
+        v-model="leadPrivateKey"
+        :placeholder="
+          $route.query.leadWallet == 'leadWalletBTC'
+            ? $t('message.text84')
+            : $t('message.text844')
+        "
+      />
     </div>
     <h3 v-text="$t('message.text82')">Reset wallet name and password</h3>
     <div class="inputName">
@@ -41,7 +73,9 @@
     </div>
     <div class="inputPwd">
       <div class="erorrDiv">
-        <span v-show="prompt1" v-text="$t('message.text10')">中文，英文字母和数字及下划线(4-10位)</span>
+        <span v-show="prompt1" v-text="$t('message.text10')"
+          >中文，英文字母和数字及下划线(4-10位)</span
+        >
       </div>
       <span class="inputLable" v-text="$t('message.text11')">密码</span>
       <div class="inputDiv">
@@ -56,7 +90,9 @@
     </div>
     <div class="inputAgainPwd">
       <div class="erorrDiv">
-        <span v-show="prompt2" v-text="$t('message.text13')">字符为8~30，包含数字和字母</span>
+        <span v-show="prompt2" v-text="$t('message.text13')"
+          >字符为8~30，包含数字和字母</span
+        >
       </div>
 
       <span class="inputLable" v-text="$t('message.text14')">确认密码</span>
@@ -79,7 +115,7 @@
 
 <script>
 import { clickNext } from "../assets/js/leadWallet";
-
+import { Notify } from "vant";
 export default {
   data() {
     return {
@@ -96,7 +132,7 @@ export default {
       WordsOrkeystore: false,
       createWalletObj: {},
       accounts: [],
-      inputMnemonic: '', //输入框数组
+      inputMnemonic: "", //输入框数组
       flag: false, //判断钱包名字是否重复和助记词是否都填写
       flag1: false, //导入时钱包有重名的，确认后直接跳首页，新钱包就去确认导入页面
       msg1:
@@ -109,7 +145,6 @@ export default {
   },
 
   created() {
-    
     if (
       this.$route.query.leadWallet == "leadWallet2" ||
       this.$route.query.leadWallet == "leadWalletFIL"
@@ -118,8 +153,7 @@ export default {
       this.BHP2Hide = false;
     }
     if (localStorage.getItem("lang") == "cn") {
-      this.msg1 =
-        "此导入的钱包已存在，确认继续导入吗？会保留新钱包，覆盖原钱包";
+      this.msg1 = "此导入的钱包已存在，确认继续导入吗？会保留新钱包，覆盖原钱包";
       this.msg2 = "请输入正确的助记词";
       this.msg3 = "请输入24个助记词";
       this.msg4 = "请输入 leadPrivateKey";
@@ -131,15 +165,15 @@ export default {
       this.msg3 = "Please enter 24 mnemonics";
       this.msg4 = "Please enter leadPrivateKey";
       this.msg5 = "leadPrivateKey error!";
-    
     }
+    Notify({ duration: 5000,background: '#3d7fff', message: this.$t('message.text123') })
   },
   methods: {
-    toFocusWords(){
-      this.$refs.hideInputWords.focus()
+    toFocusWords() {
+      this.$refs.hideInputWords.focus();
     },
-    toFocusKey(){
-      this.$refs.hideInputKey.focus()
+    toFocusKey() {
+      this.$refs.hideInputKey.focus();
     },
     toClickNext() {
       clickNext(this);
@@ -177,17 +211,20 @@ export default {
       } else {
         this.prompt3 = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style lang="less" >
-
+<style lang="less">
+ .van-notify{
+    font-size: 22px;
+    padding:14px 16px;
+    line-height: 26px;
+  }
 .leadWallet {
   position: relative; //安卓用flex，唤起输入法会把页面挤扁
   padding-bottom: 44px;
-  
   .loading {
     position: fixed;
     top: 0;

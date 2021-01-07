@@ -38,21 +38,13 @@ export async function createWalletFIL(that, mnemonic) {
     let myAddress = await walletProvider.getDefaultAccount();
     that.createWalletObjFIL["address"] = myAddress;
     that.createWalletObjFIL["name"] = that.inputName;
-    let sha256 = require("js-sha256").sha256
-    let key1 = sha256(that.inputPwd)
-    key1 = Utils.encryptECB(key1,that.inputPwd)
-    function fn3(num, length) {  
-        return (num + Array(length).join('0')).slice(0,length);  
-    }  
-    let key2 = fn3(key1,16)
-    that.createWalletObjFIL["privateKey"] = Utils.encrypt(
-        myAddress + privateKey,
-        key2,
+   
+    that.createWalletObjFIL["privateKey"] = Utils.encryptContent(
+        privateKey,
         that.inputPwd
     );
-    that.createWalletObjFIL["phrase"] = Utils.encrypt(
-        myAddress + mnemonic,
-        key2,
+    that.createWalletObjFIL["phrase"] = Utils.encryptContent(
+        mnemonic,
         that.inputPwd
     );
     that.$store.commit("getBipList", mnemonic.split(" "));
@@ -68,21 +60,12 @@ export function createWallet1(that, mnemonic) {
 
     that.createWalletObj["address"] = acct._address;
     that.createWalletObj["name"] = that.inputName;
-    let sha256 = require("js-sha256").sha256
-    let key1 = sha256(that.inputPwd)
-    key1 = Utils.encryptECB(key1,that.inputPwd)
-    function fn3(num, length) {  
-        return (num + Array(length).join('0')).slice(0,length);  
-    }  
-    let key2 = fn3(key1,16)
-    that.createWalletObj["privateKey"] = Utils.encrypt(
-        acct._address + acct._privateKey,
-        key2,
+    that.createWalletObj["privateKey"] = Utils.encryptContent(
+        acct._privateKey,
         that.inputPwd
     );
-    that.createWalletObj["phrase"] = Utils.encrypt(
-        acct._address + mnemonic,
-        key2,
+    that.createWalletObj["phrase"] = Utils.encryptContent(
+        mnemonic,
         that.inputPwd
     );
     that.$store.commit("getBipList", mnemonic.split(" "));
@@ -100,24 +83,15 @@ export function createWalletETH(that, mnemonic) {
     that.createWalletObjETH["privateKey"] = accountETH.privateKey;
     that.phrase = accountETH.mnemonic.phrase;
     that.$store.commit("getBipList", that.phrase.split(" "));
-    let sha256 = require("js-sha256").sha256
-    let key1 = sha256(that.inputPwd)
-    key1 = Utils.encryptECB(key1,that.inputPwd)
-    function fn3(num, length) {  
-        return (num + Array(length).join('0')).slice(0,length);  
-    }  
-    let key2 = fn3(key1,16)
-    let phrase = Utils.encrypt(
-        accountETH.address + that.createWalletObjETH["phrase"],
-        key2,
+   
+    let phrase = Utils.encryptContent(
+        that.createWalletObjETH["phrase"],
         that.inputPwd
     );
-
     that.createWalletObjETH["phrase"] = phrase;
     
-    let privateKey = Utils.encrypt(
-        accountETH.address + that.createWalletObjETH["privateKey"],
-        key2,
+    let privateKey = Utils.encryptContent(
+        that.createWalletObjETH["privateKey"],
         that.inputPwd
     );
 
@@ -157,22 +131,14 @@ export function createWallet2(that, mnemonic) {
     };
     that.$store.commit("getBipList", account2.phrase.split(" "));
     account2.name = that.inputName;
-    let sha256 = require("js-sha256").sha256
-    let key1 = sha256(that.inputPwd)
-    key1 = Utils.encryptECB(key1,that.inputPwd)
-    function fn3(num, length) {  
-        return (num + Array(length).join('0')).slice(0,length);  
-    }  
-    let key2 = fn3(key1,16)
-    let phrase = Utils.encrypt(
-        account2.address + account2.phrase,
-        key2,
+
+    let phrase = Utils.encryptContent(
+        account2.phrase,
         that.inputPwd
     );
     account2.phrase = phrase;
-    let privateKey = Utils.encrypt(
-        account2.address + account2.privateKey,
-        key2,
+    let privateKey = Utils.encryptContent(
+        account2.privateKey,
         that.inputPwd
     );
     account2.privateKey = privateKey;
@@ -197,22 +163,13 @@ export async function createWalletBTC(that, mnemonic) {
     that.createWalletObjBTC["address"] = p2wpkh.address;
     that.createWalletObjBTC["name"] = that.inputName;
 
-    let sha256 = require("js-sha256").sha256
-    let key1 = sha256(that.inputPwd)
-    key1 = Utils.encryptECB(key1,that.inputPwd)
-    function fn3(num, length) {  
-        return (num + Array(length).join('0')).slice(0,length);  
-    }  
-    let key2 = fn3(key1,16)
-    that.createWalletObjBTC["privateKey"] = Utils.encrypt(
-        p2wpkh.address + wif,
-        key2,
+    that.createWalletObjBTC["privateKey"] = Utils.encryptContent(
+        wif,
         that.inputPwd
     );
 
-    that.createWalletObjBTC["phrase"] = Utils.encrypt(
-        p2wpkh.address + mnemonic,
-        key2,
+    that.createWalletObjBTC["phrase"] = Utils.encryptContent(
+        mnemonic,
         that.inputPwd
     );
     that.$store.commit("getBipList", mnemonic.split(" "));
