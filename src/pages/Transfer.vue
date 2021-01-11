@@ -219,7 +219,7 @@
 const Bhpnet = require("bhp-js-sdk");
 const ethers = require("ethers");
 
-const checkAddress = (address, hrp) => {
+const bhp2_validateaddress = (address, hrp) => {
   const DECODED_ADDRESS_LEN = 20;
   try {
     if (!address.startsWith(hrp)) {
@@ -238,19 +238,20 @@ const checkAddress = (address, hrp) => {
 };
 const Bhp = require("../assets/js/bhp-js/bhp-browser");
 import {
-  getbalance,
-  sendrawtransaction,
-  getAccounts,
-  broadcastTrading,
+  bhp_getBalance,
+  bhp_sendTransaction,
+  bhp_validateaddress,
+  bhp2_getBalance,
+  bhp2_sendTransaction,
   eth_getBalance,
   eth_sign,
   eth_sendTransaction,
-  validateaddress,
-  filWalletValidateAddress,
-  gasPriceOracle,
-  btc_getBalanceAndUTXO,
-  sendBTC,
-  BTCSatoshis,
+  eth_getGasPrice,
+  fil_validateaddress,
+  btc_getBalance,
+  btc_sendTransaction,
+  btc_getSatoshis,
+  btc_validateaddress
 } from "../api/api";
 import Utils from "../assets/js/utils.js";
 import { Toast, DropdownMenu, DropdownItem, RadioGroup, Radio } from "vant";
@@ -629,7 +630,7 @@ export default {
           this.privateKey = this.allWalletList[i].privateKey;
         }
       }
-      this.getGetbalance(this.localAddress);
+      this.asset(this.localAddress);
     } else if (this.$route.query.address2) {
       this.logoImg = require("../assets/img/BHP2sider.png");
 
@@ -645,7 +646,7 @@ export default {
           this.privateKey = this.allWalletList2[i].privateKey;
         }
       }
-      this.getGetAccounts(this.localAddress);
+      this.asset2(this.localAddress);
     } else if (this.$route.query.addressFIL) {
       this.logoImg = require("../assets/img/FIL.png");
       this.walletType = "FIL";
@@ -660,7 +661,7 @@ export default {
           this.phrase = this.allWalletListFIL[i].phrase;
         }
       }
-      this.getFILAccounts(this.localAddress);
+      this.assetFIL(this.localAddress);
     } else if (this.$route.query.addressBTC) {
       this.logoImg = require("../assets/img/BTC.png");
       this.walletType = "BTC";
@@ -669,7 +670,7 @@ export default {
         asset: "BTC",
       };
       this.localAddress = this.$route.query.addressBTC;
-      BTCSatoshis().then((res) => {
+      btc_getSatoshis().then((res) => {
         if (res.data) {
           this.Satoshi = res.data;
 
@@ -693,7 +694,7 @@ export default {
       };
 
       //获取ETH gasPrice
-      gasPriceOracle().then((res) => {
+      eth_getGasPrice().then((res) => {
         if (res.data) {
           this.transferSpeed = res.data;
           this.gasLimitRadio = this.transferSpeed.standard;
@@ -819,7 +820,7 @@ export default {
     },
 
     //获取FIL资产
-    async getFILAccounts() {
+    async assetFIL() {
       const { HttpJsonRpcConnector, HttpJsonRpcWalletProvider } = require("filecoin.js");
       const connector = new HttpJsonRpcConnector({
         url: "api/rpc/v0",
@@ -837,7 +838,7 @@ export default {
     },
     //获取BTC资产
     assetBTC(address) {
-      btc_getBalanceAndUTXO(address).then((res) => {
+      btc_getBalance(address).then((res) => {
         if (res.data.txrefs) {
           this.txrefs = res.data.txrefs;
           this.bytes = this.txrefs.length * 148 + 2 * 34 + 10;
@@ -866,9 +867,9 @@ export default {
         }
       });
     },
-    //查询BHP余额
-    getGetbalance(address) {
-      getbalance(address).then((res) => {
+    //查询BHP余额和UTXO
+    asset(address) {
+      bhp_getBalance(address).then((res) => {
         if (res.data.result) {
           this.amount = parseFloat(res.data.result.balance[0].amount).toFixed(4);
           this.unspent = res.data.result.balance[0].unspent;
@@ -876,8 +877,8 @@ export default {
       });
     },
     //查询BHP2.0
-    getGetAccounts(address) {
-      getAccounts(address).then((res) => {
+    asset2(address) {
+      bhp2_getBalance(address).then((res) => {
         if (res.data.result.value.coins.length > 0) {
           this.amount = (
             parseFloat(res.data.result.value.coins[0].amount) / 100000000
@@ -916,7 +917,7 @@ export default {
 
         config = Bhp.api.makeTransaction(config);
         this.txHex = config.txHex;
-        sendrawtransaction(this.txHex)
+        bhp_sendTransaction(this.txHex)
           .then((res) => {
             // setTimeout(() => {
             that.loading = false;
@@ -967,7 +968,7 @@ export default {
         that.loading = true;
 
         // BTC广播交易========================================
-        sendBTC(stx)
+        btc_sendTransaction(stx)
           .then((res) => {
             // setTimeout(() => {
             that.loading = false;
@@ -1116,7 +1117,7 @@ export default {
         };
         this.loading = true;
         let stdTx = builder.buildAndSignTx(tx, privateKey);
-        broadcastTrading(JSON.stringify(stdTx.GetData()))
+        bhp2_sendTransaction(JSON.stringify(stdTx.GetData()))
           .then((res) => {
             // setTimeout(() => {
             that.loading = false;
@@ -1307,7 +1308,7 @@ export default {
     async surePWD() {
       this.show1 = false;
       if (this.$route.query.address1) {
-        validateaddress(this.inputAddress).then((res) => {
+        bhp_validateaddress(this.inputAddress).then((res) => {
           //1.0地址输错，转账方法不会报错，就先校验地址。2.0输错地址，方法会报错，除了密码错误，就只会是地址错误
           // console.log(res.data.result.isvalid);
           if (res.data.result.isvalid) {
@@ -1325,7 +1326,7 @@ export default {
           }
         });
       } else if (this.$route.query.addressFIL) {
-        filWalletValidateAddress(this.inputAddress).then((res) => {
+        fil_validateaddress(this.inputAddress).then((res) => {
           //验证地址是否正确
           if (res.data.result) {
             try {
@@ -1341,7 +1342,7 @@ export default {
           }
         });
       } else if (this.$route.query.address2) {
-        if (checkAddress(this.inputAddress, "bhp")) {
+        if (bhp2_validateaddress(this.inputAddress, "bhp")) {
           try {
             //2.0转账方法
             this.MakeTransaction2();
@@ -1366,12 +1367,7 @@ export default {
           Toast.fail(this.msg3);
         }
       } else if (this.$route.query.addressBTC) {
-        axios
-          .get(
-            "https://api.blockcypher.com/v1/btc/main/addrs/" +
-              this.inputAddress +
-              "/balance"
-          )
+          btc_validateaddress(this.inputAddress)
           .then((res) => {
             console.log(res);
             try {

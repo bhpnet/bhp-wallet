@@ -275,8 +275,8 @@ import {
   deleteETH,
   deleteBTC,
   deleteFIL,
-  delete1,
-  delete2,
+  deleteBHP,
+  deleteBHP2,
   surePWDPrivateKey,
   surePWDMnemonic
 } from "../assets/js/index";
@@ -340,10 +340,10 @@ export default {
       deleteFIL(this, i);
     },
     deleteWallet1(v, i) {
-      delete1(this, i);
+      deleteBHP(this, i);
     },
     deleteWallet2(v, i) {
-      delete2(this, i);
+      deleteBHP2(this, i);
     },
     changeWalletsBox(val) {
       this.walletType = val;

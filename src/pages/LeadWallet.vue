@@ -198,12 +198,14 @@ export default {
       }
     },
     checkPwd() {
+      this.prompt3 = true
       var regstr = /^[0-9a-zA-Z]{8,30}$/;
       if (!regstr.test(this.inputPwd)) {
         this.prompt2 = true;
       } else {
         this.prompt2 = false;
       }
+      this.checkAgainPwd()
     },
     checkAgainPwd() {
       if (this.inputAgainPwd != this.inputPwd) {

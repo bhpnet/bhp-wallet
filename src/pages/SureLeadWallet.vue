@@ -1,22 +1,29 @@
 <template>
   <div class="sureLeadWallet">
     <img @click="clickReturn()" src="../assets/img/return1.png" alt />
-    <h2 style="font-weight:bold" v-text="$t('message.text17')">导入钱包</h2>
+    <h2 style="font-weight: bold" v-text="$t('message.text17')">导入钱包</h2>
 
     <div class="assetMsg">
-      <span class="walletname" style="color:#000">{{newLeadWallet.name}}</span>
+      <span class="walletname" style="color: #000">{{ newLeadWallet.name }}</span>
       <span v-text="$t('message.text20')">资产余额</span>
-      <span class="money">{{assetName}} {{this.value}}</span>
+      <span class="money">{{ assetName }} {{ this.value }}</span>
       <span v-text="$t('message.text19')">钱包地址</span>
-      <p class="address">{{newLeadWallet.address}}</p>
+      <p class="address">{{ newLeadWallet.address }}</p>
     </div>
-    <button class="firstBtn" @click="sureLead()" v-text="$t('message.text21')">确认导入</button>
+    <button class="firstBtn" @click="sureLead()" v-text="$t('message.text21')">
+      确认导入
+    </button>
     <button @click="toUpdate()" v-text="$t('message.text22')">返回修改</button>
   </div>
 </template>
 
 <script>
-import { getasset, getAccounts, eth_getBalance, btc_getBalanceAndUTXO } from "../api/api";
+import {
+  bhp_getBalance,
+  bhp2_getBalance,
+  eth_getBalance,
+  btc_getBalance,
+} from "../api/api";
 import ethers from "ethers";
 import Utils from "../assets/js/utils.js";
 import { HttpJsonRpcConnector, HttpJsonRpcWalletProvider } from "filecoin.js";
@@ -26,13 +33,13 @@ export default {
       newLeadWallet: {},
       accounts: [],
       assetName: "",
-      value: 0
+      value: 0,
     };
   },
   created() {
     this.newLeadWallet = this.$store.state.newLeadWallet;
     if (this.$route.query.address2) {
-      this.Accounts(this.newLeadWallet.address);
+      this.assetes2(this.newLeadWallet.address);
     } else if (this.$route.query.address1) {
       this.assetes(this.newLeadWallet.address);
     } else if (this.$route.query.addressETH) {
@@ -46,9 +53,9 @@ export default {
   methods: {
     //获取BTC资产余额
     assetBTC(address) {
-      btc_getBalanceAndUTXO(address).then(res => {
+      btc_getBalance(address).then((res) => {
         if (res.data.balance) {
-          this.value = parseFloat(res.data.balance/Math.pow(10,8)).toFixed(4);
+          this.value = parseFloat(res.data.balance / Math.pow(10, 8)).toFixed(4);
           if (this.value == 0) {
             this.value = 0;
           }
@@ -64,7 +71,7 @@ export default {
       const connector = new HttpJsonRpcConnector({
         url: "api/rpc/v0",
         token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc"
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc",
       });
       //查询资产
       let rpc = new HttpJsonRpcWalletProvider(connector);
@@ -82,11 +89,9 @@ export default {
     },
     //获取以太坊资产
     assetETH(address) {
-      eth_getBalance(address).then(res => {
+      eth_getBalance(address).then((res) => {
         if (res.data.result) {
-          this.value = (
-            parseInt(res.data.result, 16) / Math.pow(10, 18)
-          ).toFixed(4);
+          this.value = (parseInt(res.data.result, 16) / Math.pow(10, 18)).toFixed(4);
           if (this.value == 0) {
             this.value = 0;
           }
@@ -100,12 +105,12 @@ export default {
     //获取地址资产
     assetes(address) {
       //钱包1.0查询余额
-      getasset(address).then(res => {
-        if (res.data.result.balances.length > 0) {
-          res.data.result.balances.forEach((v, i) => {
+      bhp_getBalance(address).then((res) => {
+        if (res.data.result.balance.length > 0) {
+          res.data.result.balance.forEach((v, i) => {
             v.asset = this.getAssetName(v.asset);
           });
-          this.value = parseFloat(res.data.result.balances[0].value).toFixed(4);
+          this.value = parseFloat(res.data.result.balance[0].amount).toFixed(4);
           if (this.value == 0) {
             this.value = 0;
           }
@@ -116,9 +121,9 @@ export default {
         }
       });
     },
-    Accounts(address) {
+    assetes2(address) {
       //钱包2.0查询余额
-      getAccounts(address).then(res => {
+      bhp2_getBalance(address).then((res) => {
         if (res.data.result.value.coins.length > 0) {
           this.value = (
             parseFloat(res.data.result.value.coins[0].amount) / 100000000
@@ -144,8 +149,8 @@ export default {
         this.$router.replace({
           path: "/indexHome/myWallet",
           query: {
-            address1: this.newLeadWallet.address
-          }
+            address1: this.newLeadWallet.address,
+          },
         });
       } else if (this.$route.query.address2) {
         this.accounts = JSON.parse(localStorage.getItem("accounts2")) || []; //||[]很重要
@@ -154,8 +159,8 @@ export default {
         this.$router.replace({
           path: "/indexHome/myWallet",
           query: {
-            address2: this.newLeadWallet.address
-          }
+            address2: this.newLeadWallet.address,
+          },
         });
       } else if (this.$route.query.addressETH) {
         this.accounts = JSON.parse(localStorage.getItem("accountsETH")) || []; //||[]很重要
@@ -164,8 +169,8 @@ export default {
         this.$router.replace({
           path: "/indexHome/myWallet",
           query: {
-            addressETH: this.newLeadWallet.address
-          }
+            addressETH: this.newLeadWallet.address,
+          },
         });
       } else if (this.$route.query.addressBTC) {
         this.accounts = JSON.parse(localStorage.getItem("accountsBTC")) || []; //||[]很重要
@@ -174,8 +179,8 @@ export default {
         this.$router.replace({
           path: "/indexHome/myWallet",
           query: {
-            addressBTC: this.newLeadWallet.address
-          }
+            addressBTC: this.newLeadWallet.address,
+          },
         });
       } else if (this.$route.query.addressFIL) {
         this.accounts = JSON.parse(localStorage.getItem("accountsFIL")) || []; //||[]很重要
@@ -184,8 +189,8 @@ export default {
         this.$router.replace({
           path: "/indexHome/myWallet",
           query: {
-            addressFIL: this.newLeadWallet.address
-          }
+            addressFIL: this.newLeadWallet.address,
+          },
         });
       }
     },
@@ -219,8 +224,8 @@ export default {
     },
     toUpdate() {
       this.$router.push("/leadWallet");
-    }
-  }
+    },
+  },
 };
 </script>
 

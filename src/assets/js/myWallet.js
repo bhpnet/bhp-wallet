@@ -1,13 +1,18 @@
-import { getasset, getAccounts, eth_getBalance,btc_getBalanceAndUTXO } from "../../api/api";
+import {
+    bhp_getBalance,
+    bhp2_getBalance,
+    eth_getBalance,
+    btc_getBalance
+} from "../../api/api";
 
 //查询各个1.0钱包的资产
 export async function allAssetes(that) {
     that.valueSum1 = 0;
     for (let i in that.allWalletList) {
-        await getasset(that.allWalletList[i].address).then(res => {
-            if (res.data.result.balances.length > 0) {
+        await bhp_getBalance(that.allWalletList[i].address).then(res => {
+            if (res.data.result.balance.length > 0) {
                 that.allWalletList[i].assets = parseFloat(
-                    res.data.result.balances[0].value
+                    res.data.result.balance[0].amount
                 );
                 that.valueSum1 += that.allWalletList[i].assets;
             } else {
@@ -20,31 +25,33 @@ export async function allAssetes(that) {
 //查询各个BTC钱包的资产
 export async function allAssetesBTC(that) {
     that.valueSumBTC = 0;
-    
+
     for (let i in that.allWalletListBTC) {
-        await btc_getBalanceAndUTXO(that.allWalletListBTC[i].address).then((res) => {
+        await btc_getBalance(that.allWalletListBTC[i].address).then((res) => {
             if (res.data.balance) {
                 that.allWalletListBTC[i].assets = parseFloat(res.data.balance / Math.pow(10, 8))
-                
-              
-              that.valueSumBTC += that.allWalletListBTC[i].assets;
+
+
+                that.valueSumBTC += that.allWalletListBTC[i].assets;
             } else {
                 that.allWalletListBTC[i].assets = 0;
             }
-          });
-       
+        });
+
     }
     localStorage.setItem("accountsBTC", JSON.stringify(that.allWalletListBTC)); //给转账和 收款页面的所有钱包余额展示，不用多次调用查询每个钱包的接口
 }
 //查询各个FIL钱包的资产
 export async function allAssetesFIL(that) {
-    const  {HttpJsonRpcConnector,HttpJsonRpcWalletProvider} = require('filecoin.js')//防止进页面就卡顿
+    const {
+        HttpJsonRpcConnector,
+        HttpJsonRpcWalletProvider
+    } = require('filecoin.js') //防止进页面就卡顿
     that.valueSumFIL = 0;
     for (let i in that.allWalletListFIL) {
         const connector = new HttpJsonRpcConnector({
             url: "api/rpc/v0",
-            token:
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc"
+            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc"
         });
         //查询资产
         let rpc = new HttpJsonRpcWalletProvider(connector);
@@ -65,7 +72,7 @@ export async function allAssetesFIL(that) {
 export async function allAssetes2(that) {
     that.valueSum2 = 0;
     for (let i in that.allWalletList2) {
-        await getAccounts(that.allWalletList2[i].address).then(res => {
+        await bhp2_getBalance(that.allWalletList2[i].address).then(res => {
             if (res.data.result.value.coins.length > 0) {
                 that.allWalletList2[i].assets = parseFloat(
                     res.data.result.value.coins[0].amount / 100000000
@@ -101,7 +108,7 @@ export async function allAssetesETH(that) {
 }
 
 //获取以太坊资产
-export function assetETH(that,address) {
+export function assetETH(that, address) {
     eth_getBalance(address).then(res => {
         if (res.data.result) {
             that.newWalletValue =
@@ -112,26 +119,28 @@ export function assetETH(that,address) {
     });
 }
 //获取BTC资产
-export function assetBTC(that,address) {
-        btc_getBalanceAndUTXO(address).then((res) => {
-          if (res.data.balance) {
+export function assetBTC(that, address) {
+    btc_getBalance(address).then((res) => {
+        if (res.data.balance) {
             that.newWalletValue = parseFloat(res.data.balance / Math.pow(10, 8))
             if (that.newWalletValue == 0) {
                 that.newWalletValue = 0;
             }
-          } else {
+        } else {
             that.newWalletValue = 0;
-          }
-        });
-      
+        }
+    });
+
 }
 //获取FIL资产
-export async function assetFIL(that,address) {
-    const  {HttpJsonRpcConnector,HttpJsonRpcWalletProvider} = require('filecoin.js')//防止进页面就卡顿
+export async function assetFIL(that, address) {
+    const {
+        HttpJsonRpcConnector,
+        HttpJsonRpcWalletProvider
+    } = require('filecoin.js') //防止进页面就卡顿
     const connector = new HttpJsonRpcConnector({
         url: "api/rpc/v0",
-        token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc"
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc"
     });
     //查询资产
     let rpc = new HttpJsonRpcWalletProvider(connector);
@@ -143,14 +152,14 @@ export async function assetFIL(that,address) {
     }
 }
 //获取地址资产
-export function assetes(that,address) {
-    getasset(address).then(res => {
-        if (res.data.result.balances.length > 0) {
-            res.data.result.balances.forEach((v, i) => {
+export function assetes(that, address) {
+    bhp_getBalance(address).then(res => {
+        if (res.data.result.balance.length > 0) {
+            res.data.result.balance.forEach((v, i) => {
                 v.asset = that.getAssetName(v.asset);
             });
 
-            that.newWalletValue = res.data.result.balances[0].value;
+            that.newWalletValue = res.data.result.balance[0].amount;
         } else {
             that.newWalletValue = 0;
         }
@@ -158,9 +167,9 @@ export function assetes(that,address) {
     });
 }
 //获取地址资产2.0
-export function Accounts(that,address) {
+export function assetes2(that, address) {
     // that.newWalletValue = 0;
-    getAccounts(address).then(res => {
+    bhp2_getBalance(address).then(res => {
         if (res.data.result.value.coins.length > 0) {
             that.newWalletValue = parseFloat(
                 res.data.result.value.coins[0].amount / 100000000
