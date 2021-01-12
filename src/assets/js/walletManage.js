@@ -105,7 +105,7 @@ export function deleteFIL(that, i) {
         }
     }
 }
-export function deleteBHP(that, i) {
+export function delete1(that, i) {
     for (let index in that.allWalletList) {
         if (index == i) {
             Dialog.confirm({
@@ -140,7 +140,7 @@ export function deleteBHP(that, i) {
         }
     }
 }
-export function deleteBHP2(that, i) {
+export function delete2(that, i) {
     for (let index in that.allWalletList2) {
         if (index == i) {
             Dialog.confirm({

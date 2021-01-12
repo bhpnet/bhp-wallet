@@ -226,7 +226,7 @@ export async function clickNext(that) {
                     const child = master.derivePath("44'/461'/0'/0/0");
                     let MyPrivateKey = child.privateKey.toString("hex");
                     const connector = new HttpJsonRpcConnector({
-                        url: "https://192.168.1.174:5001",
+                        url: "https://mrpc.bhpnet.io/fil/rpc/v0",
                         token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.Pwmjx-FTuJb5PQvZ2XCr991jy8N17nfAupWvScY9Qw4"
                     });
                     const hdWalletMnemonic = that.inputMnemonic;

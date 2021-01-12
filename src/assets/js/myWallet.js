@@ -50,7 +50,7 @@ export async function allAssetesFIL(that) {
     that.valueSumFIL = 0;
     for (let i in that.allWalletListFIL) {
         const connector = new HttpJsonRpcConnector({
-            url: "api/rpc/v0",
+            url: "https://mrpc.bhpnet.io/fil/rpc/v0",
             token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc"
         });
         //查询资产
@@ -139,7 +139,7 @@ export async function assetFIL(that, address) {
         HttpJsonRpcWalletProvider
     } = require('filecoin.js') //防止进页面就卡顿
     const connector = new HttpJsonRpcConnector({
-        url: "api/rpc/v0",
+        url: "https://mrpc.bhpnet.io/fil/rpc/v0",
         token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc"
     });
     //查询资产

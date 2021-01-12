@@ -22,7 +22,7 @@ export async function createWalletFIL(that, mnemonic) {
     const child = master.derivePath("44'/461'/0'/0/0");
     let privateKey = child.privateKey.toString("hex");
     const connector = new HttpJsonRpcConnector({
-        url: "http://192.168.1.174:5001",
+        url: "https://mrpc.bhpnet.io/fil/rpc/v0",
         token:
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.kTsgZxZWsgUpCDk0LYSYIcxTNRO6h3VtlQYGBIZ-knM"
     });

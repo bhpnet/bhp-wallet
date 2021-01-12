@@ -69,7 +69,7 @@ export default {
     //获取FIL资产
     async assetFIL(address) {
       const connector = new HttpJsonRpcConnector({
-        url: "api/rpc/v0",
+        url: "https://mrpc.bhpnet.io/fil/rpc/v0",
         token:
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc",
       });

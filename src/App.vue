@@ -93,7 +93,7 @@ export default {
     document.addEventListener("plusready", function() {//只能进入app触发或者刷新时触发
       plus.runtime.getProperty(plus.runtime.appid, function(inf) {
         var wgtVersion = Number(inf.version.replace(/[.]/g, ""));
-        axios.get("https://api.bhpnet.io/app/checkVersion").then(res => {
+        axios.get("https://mrpc.bhpnet.io/app/checkVersion.json ").then(res => {
           if (res.data.data) {
             that.content_cn = res.data.data.content_cn;
             that.content_en = res.data.data.content_en;
@@ -121,7 +121,7 @@ export default {
     },
     downWgt() {
       let that = this;
-      var wgtUrl = "https://bhpnet.io/app/io.bhpnet.wallet.wgt";
+      var wgtUrl = "https://mrpc.bhpnet.io/app/io.bhpnet.wallet.wgt ";
       plus.nativeUI.showWaiting(that.msg3 + "...");
       plus.downloader
         .createDownload(

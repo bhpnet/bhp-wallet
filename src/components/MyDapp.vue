@@ -67,7 +67,7 @@ export default {
       let that = this;
 
       var wgtVersion = Number(this.wgtVersion.replace(/[.]/g, ""));
-      axios.get("https://api.bhpnet.io/app/checkVersion").then((res) => {
+      axios.get("https://mrpc.bhpnet.io/app/checkVersion.json").then((res) => {
         if (res.data.data) {
           // console.log(
           //   "安装包：" + Number(res.data.data.version.replace(/[.]/g, "")),

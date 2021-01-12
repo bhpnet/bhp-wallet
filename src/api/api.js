@@ -1,9 +1,9 @@
 import axios from 'axios'
-// const IP = 'https://rpc.bhpa.io'
+// const IP = 'https://mrpc.bhpnet.io/bhp'
 
 // all 获取所有币种币价
 export function all_getPrice(exchange, coinName_usdt) {
-    return axios.get("https://api.bhpa.io/exchange/api/getPrice", {
+    return axios.get("https://mrpc.bhpnet.io/exchange-api/getPrice", {
         params: {
             exchangeName: exchange,
             symbol: coinName_usdt
@@ -13,7 +13,7 @@ export function all_getPrice(exchange, coinName_usdt) {
 
 // bhp1.0查询余额和UTXO
 export function bhp_getBalance(address) {
-    return axios.post("https://rpc.bhpa.io", {
+    return axios.post("https://mrpc.bhpnet.io/bhp", {
         jsonrpc: "2.0",
         id: 1,
         method: "getunspents",
@@ -23,7 +23,7 @@ export function bhp_getBalance(address) {
 
 // bhp1.0验证地址
 export function bhp_validateaddress(address) {
-    return axios.post('https://rpc.bhpa.io', {
+    return axios.post('https://mrpc.bhpnet.io/bhp', {
         "jsonrpc": "2.0",
         "method": "validateaddress",
         "params": [address],
@@ -33,29 +33,29 @@ export function bhp_validateaddress(address) {
 
 // bhp1.0广播
 export function bhp_sendTransaction(tx) {
-    return axios.post("https://rpc.bhpa.io", {
+    return axios.post("https://mrpc.bhpnet.io/bhp", {
         jsonrpc: "2.0",
         method: "sendrawtransaction",
         params: [tx],
         id: 1
     })
 }
-// bhp2.0查询余额
-export function bhp2_getBalance(address) {
-    return axios.get("https://rpc.bhpnet.io/auth/accounts/" + address, {
-        params: {}
-    })
-}
+// // bhp2.0查询余额
+// export function bhp2_getBalance(address) {
+//     return axios.get("https://rpc.bhpnet.io/auth/accounts/" + address, {
+//         params: {}
+//     })
+// }
 
-// bhp2.0 广播交易
-export function bhp2_sendTransaction(tx) {
-    return axios.post("https://rpc.bhpnet.io/txs", tx)
-}
+// // bhp2.0 广播交易
+// export function bhp2_sendTransaction(tx) {
+//     return axios.post("https://rpc.bhpnet.io/txs", tx)
+// }
 
 // eth 查询余额
 export function eth_getBalance(address) {
     return axios.post(
-        "https://mainnet.infura.io/v3/7016d0346d5b46aba5b559a6edd3547d", {
+        "https://mrpc.bhpnet.io/eth", {
             "jsonrpc": "2.0",
             "method": "eth_getBalance",
             "params": [address, "latest"],
@@ -71,7 +71,7 @@ export function eth_getGasPrice() {
 // btc 查询余额和Utxo
 export function btc_getBalance(address) {
     return axios.get(
-        "https://api.blockcypher.com/v1/btc/main/addrs/" + address, {
+        "https://mrpc.bhpnet.io/btc/addrs/" + address, {
             params: {
                 unspentOnly: true
             }
@@ -79,23 +79,23 @@ export function btc_getBalance(address) {
 }
 // btc 广播交易
 export function btc_sendTransaction(tx) {
-    return axios.post("https://47.244.216.20:16969/api/sendrawtransaction", {
+    return axios.post("https://mrpc.bhpnet.io/btc/broadcast", {
         tx: tx
     })
 }
 // btc 手续费
 export function btc_getSatoshis() {
-    return axios.get("https://api.blockcypher.com/v1/btc/main")
+    return axios.get("https://mrpc.bhpnet.io/btc")
 }
 
 // btc 验证地址
 export function btc_validateaddress(address) {
-    return axios.get("https://api.blockcypher.com/v1/btc/main/addrs/" + address + "/balance")
+    return axios.get("https://mrpc.bhpnet.io/btc/addrs/" + address + "/balance")
 }
 
 // fil 验证地址
 export function fil_validateaddress(address) {
-    return axios.post('api/rpc/v0', {
+    return axios.post('https://mrpc.bhpnet.io/fil/rpc/v0', {
         "jsonrpc": "2.0",
         "method": "Filecoin.WalletValidateAddress",
         "params": [address],

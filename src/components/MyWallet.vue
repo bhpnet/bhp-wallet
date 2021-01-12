@@ -649,8 +649,7 @@ export default {
       } else {
         web3 = await new Web3(
           new Web3.providers.HttpProvider(
-            "https://mainnet.infura.io/v3/7016d0346d5b46aba5b559a6edd3547d"
-            // "https://ropsten.infura.io/v3/7016d0346d5b46aba5b559a6edd3547d"
+            "https://mrpc.bhpnet.io/eth"
           )
         );
       }

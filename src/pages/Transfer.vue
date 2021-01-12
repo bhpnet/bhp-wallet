@@ -262,7 +262,6 @@ const Web3 = require("web3");
 const Tx = require("ethereumjs-tx");
 const Bitcoin = require("bitcoinjs-lib");
 const network = Bitcoin.networks.bitcoin;
-import axios from "axios";
 export default {
   data() {
     return {
@@ -789,7 +788,7 @@ export default {
         } else {
           web3 = await new Web3(
             new Web3.providers.HttpProvider(
-              "https://mainnet.infura.io/v3/7016d0346d5b46aba5b559a6edd3547d"
+              "https://mrpc.bhpnet.io/eth"
             )
           );
         }
@@ -823,7 +822,7 @@ export default {
     async assetFIL() {
       const { HttpJsonRpcConnector, HttpJsonRpcWalletProvider } = require("filecoin.js");
       const connector = new HttpJsonRpcConnector({
-        url: "api/rpc/v0",
+        url: "https://mrpc.bhpnet.io/fil/rpc/v0",
         token:
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc",
       });
@@ -1039,7 +1038,7 @@ export default {
       let phrase = Utils.decryptContent(this.phrase, this.password);
       
         const connector = new HttpJsonRpcConnector({
-          url: "api/rpc/v0",
+          url: "https://mrpc.bhpnet.io/fil/rpc/v0",
           token:
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc",
         });
@@ -1155,7 +1154,7 @@ export default {
           if (that.selectValue == "ETH") {
             let wallet = new ethers.Wallet(privateKey); //用私钥导入的没有助记词
             var provider = new ethers.providers.JsonRpcProvider(
-              "https://mainnet.infura.io/v3/283115421d2e4e9c86a4c580fd7283fe"
+              "https://mrpc.bhpnet.io/eth"
             );
 
             let num = parseFloat(this.inputAmount * 1000000000000000000);
@@ -1217,7 +1216,7 @@ export default {
       } else {
         web3 = await new Web3(
           new Web3.providers.HttpProvider(
-            "https://mainnet.infura.io/v3/7016d0346d5b46aba5b559a6edd3547d"
+            "https://mrpc.bhpnet.io/eth"
           )
         );
       }
