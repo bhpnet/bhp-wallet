@@ -11,8 +11,8 @@ import * as bitcoin from "bitcoinjs-lib";
 
 export async function clickNext(that) {
     if (that.spanActive == "助记词") {
-        that.inputMnemonic = that.inputMnemonic.replace(/\s+/g, " ") //去多余空格
-        that.inputMnemonic = that.inputMnemonic.replace(/(^\s*)|(\s*$)/g, "") //去两边空格
+        that.inputMnemonic = that.inputMnemonic.replace(/\s+/g, " ")
+        that.inputMnemonic = that.inputMnemonic.replace(/(^\s*)|(\s*$)/g, "")
         if (
             that.inputName &&
             that.inputPwd &&
@@ -23,9 +23,7 @@ export async function clickNext(that) {
         ) {
             if (bip39.validateMnemonic(that.inputMnemonic)) {
                 if (that.$route.query.leadWallet == "leadWallet2") {
-                    //钱包2.0导入
                     const BHP_PREFIX = "bhp";
-                    // const MNEMONIC_LEN = 256;
                     const DERIVATION_PATH = "m/44'/547'/0'/0/0";
 
                     function Bytes2Str(arr) {
@@ -66,8 +64,7 @@ export async function clickNext(that) {
                     account.name = that.inputName;
                     account.privateKey = privateKey;
                     that.accounts2 =
-                        JSON.parse(localStorage.getItem("accounts2")) || []; //||[]很重要
-                    //去除地址重复的
+                        JSON.parse(localStorage.getItem("accounts2")) || [];
                     for (let i in that.accounts2) {
                         if (that.accounts2[i].address == account.address) {
                             that.flag1 = true;
@@ -78,7 +75,7 @@ export async function clickNext(that) {
                                     "accounts2",
                                     JSON.stringify(that.accounts2)
                                 );
-                                that.$store.commit("getWalletType", "BHP2"); //新导入的钱包进入首页显示新创建的钱包
+                                that.$store.commit("getWalletType", "BHP2");
                                 that.$router.replace({
                                     path: "/indexHome/myWallet",
                                     query: {
@@ -90,7 +87,6 @@ export async function clickNext(that) {
                             }
                         }
                     }
-                    //进入确认导入页面
                     if (!that.flag1) {
                         that.$store.commit("getNewLeadWallet", account);
 
@@ -102,14 +98,11 @@ export async function clickNext(that) {
                         });
                     }
                 } else if (that.$route.query.leadWallet == "leadWallet1") {
-                    //导入钱包1.0页面跳转过来的
-                    //钱包1.0导入 用的ETH的助记词转私钥，因12个助记词转私钥，1.0不能用该私钥生成钱包
-                    // let key = bip39.mnemonicToEntropy(that.inputMnemonic);
                     var accountETH = ethers.Wallet.fromMnemonic(
                         that.inputMnemonic
                     );
                     let key = accountETH.privateKey.substr(2)
-                    let acct = new Bhp.wallet.Account(key); //1.0不会生成助记词
+                    let acct = new Bhp.wallet.Account(key);
                     that.createWalletObj["address"] = acct._address;
                     that.createWalletObj["name"] = that.inputName;
 
@@ -123,8 +116,7 @@ export async function clickNext(that) {
                         that.inputPwd
                     );
                     that.accounts =
-                        JSON.parse(localStorage.getItem("accounts")) || []; //||[]很重要
-                    //去除地址重复的
+                        JSON.parse(localStorage.getItem("accounts")) || [];
                     for (let i in that.accounts) {
                         if (that.accounts[i].address == acct._address) {
                             that.flag1 = true;
@@ -135,7 +127,7 @@ export async function clickNext(that) {
                                     "accounts",
                                     JSON.stringify(that.accounts)
                                 );
-                                that.$store.commit("getWalletType", "BHP"); //新导入的钱包进入首页显示新创建的钱包
+                                that.$store.commit("getWalletType", "BHP");
                                 that.$router.replace({
                                     path: "/indexHome/myWallet",
                                     query: {
@@ -148,7 +140,6 @@ export async function clickNext(that) {
                         }
                     }
 
-                    //进入确认导入页面
                     if (!that.flag1) {
                         that.$store.commit("getNewLeadWallet", that.createWalletObj);
 
@@ -162,7 +153,7 @@ export async function clickNext(that) {
                 } else if (that.$route.query.leadWallet == "leadWalletETH") {
                     var accountETH = ethers.Wallet.fromMnemonic(
                         that.inputMnemonic
-                    ); //可以用助记词导入钱包
+                    );
                     that.createWalletObj["address"] = accountETH.address;
                     that.createWalletObj["name"] = that.inputName;
                     that.createWalletObj["phrase"] = accountETH.mnemonic.phrase;
@@ -180,9 +171,7 @@ export async function clickNext(that) {
                     );
                     that.createWalletObj["privateKey"] = privateKey;
                     that.accounts =
-                        JSON.parse(localStorage.getItem("accountsETH")) || []; //||[]很重要
-
-                    //去除地址重复的
+                        JSON.parse(localStorage.getItem("accountsETH")) || [];
                     for (let i in that.accounts) {
                         if (that.accounts[i].address == accountETH.address) {
                             that.flag1 = true;
@@ -193,7 +182,7 @@ export async function clickNext(that) {
                                     "accountsETH",
                                     JSON.stringify(that.accounts)
                                 );
-                                that.$store.commit("getWalletType", "ETH"); //新导入的钱包进入首页显示新创建的钱包
+                                that.$store.commit("getWalletType", "ETH");
                                 that.$router.replace({
                                     path: "/indexHome/myWallet",
                                     query: {
@@ -206,7 +195,6 @@ export async function clickNext(that) {
                         }
                     }
 
-                    //进入确认导入页面
                     if (!that.flag1) {
                         that.$store.commit("getNewLeadWallet", that.createWalletObj);
                         that.$router.push({
@@ -220,7 +208,7 @@ export async function clickNext(that) {
                     const {
                         HttpJsonRpcConnector,
                         MnemonicWalletProvider
-                    } = require('filecoin.js') //防止进页面就卡顿
+                    } = require('filecoin.js')
                     const seed = bip39.mnemonicToSeed(that.inputMnemonic);
                     const master = bip32.fromSeed(await seed);
                     const child = master.derivePath("44'/461'/0'/0/0");
@@ -255,9 +243,7 @@ export async function clickNext(that) {
                     );
                     that.createWalletObj["privateKey"] = privateKey;
                     that.accounts =
-                        JSON.parse(localStorage.getItem("accountsFIL")) || []; //||[]很重要
-
-                    //去除地址重复的
+                        JSON.parse(localStorage.getItem("accountsFIL")) || [];
                     for (let i in that.accounts) {
                         if (that.accounts[i].address == myAddress) {
                             that.flag1 = true;
@@ -268,7 +254,7 @@ export async function clickNext(that) {
                                     "accountsFIL",
                                     JSON.stringify(that.accounts)
                                 );
-                                that.$store.commit("getWalletType", "FIL"); //新导入的钱包进入首页显示新创建的钱包
+                                that.$store.commit("getWalletType", "FIL");
                                 that.$router.replace({
                                     path: "/indexHome/myWallet",
                                     query: {
@@ -281,7 +267,6 @@ export async function clickNext(that) {
                         }
                     }
 
-                    //进入确认导入页面
                     if (!that.flag1) {
                         that.$store.commit("getNewLeadWallet", that.createWalletObj);
                         that.$router.push({
@@ -296,7 +281,6 @@ export async function clickNext(that) {
                     let seed = await bip39.mnemonicToSeed(that.inputMnemonic);
                     let node = bip32.fromSeed(seed, network);
 
-                    // sw 隔离见证
                     const swPath = "m/49'/0'/0'/0/0";
                     let wif = node.derivePath(swPath).toWIF();
                     let p2wpkh = bitcoin.payments.p2sh({
@@ -320,9 +304,7 @@ export async function clickNext(that) {
                     );
 
                     that.accounts =
-                        JSON.parse(localStorage.getItem("accountsBTC")) || []; //||[]很重要
-
-                    //去除地址重复的
+                        JSON.parse(localStorage.getItem("accountsBTC")) || [];
                     for (let i in that.accounts) {
                         if (that.accounts[i].address == p2wpkh.address) {
                             that.flag1 = true;
@@ -333,7 +315,7 @@ export async function clickNext(that) {
                                     "accountsBTC",
                                     JSON.stringify(that.accounts)
                                 );
-                                that.$store.commit("getWalletType", "BTC"); //新导入的钱包进入首页显示新创建的钱包
+                                that.$store.commit("getWalletType", "BTC");
                                 that.$router.replace({
                                     path: "/indexHome/myWallet",
                                     query: {
@@ -346,7 +328,6 @@ export async function clickNext(that) {
                         }
                     }
 
-                    //进入确认导入页面
                     if (!that.flag1) {
                         that.$store.commit("getNewLeadWallet", that.createWalletObj);
                         that.$router.push({
@@ -382,18 +363,12 @@ export async function clickNext(that) {
             !that.prompt3
         ) {
             if (that.leadPrivateKey) {
-                that.leadPrivateKey = that.leadPrivateKey.replace(/(^\s*)|(\s*$)/g, "") //去两边空格
+                that.leadPrivateKey = that.leadPrivateKey.replace(/(^\s*)|(\s*$)/g, "")
                 try {
-                    if (that.$route.query.leadWallet == "leadWallet2") {
-                        //=========暂无此功能
-                    }
-                    if (that.$route.query.leadWallet == "leadWalletFIL") {
-                        //=========暂无此功能
-                    } else if (that.$route.query.leadWallet == "leadWallet1") {
-                        //导入钱包1.0页面跳转过来的
-                        //钱包1.0导入
+                    if (that.$route.query.leadWallet == "leadWallet2") {}
+                    if (that.$route.query.leadWallet == "leadWalletFIL") {} else if (that.$route.query.leadWallet == "leadWallet1") {
 
-                        let acct = new Bhp.wallet.Account(that.leadPrivateKey); //1.0不会生成助记词
+                        let acct = new Bhp.wallet.Account(that.leadPrivateKey);
                         that.createWalletObj["address"] = acct._address;
                         that.createWalletObj["name"] = that.inputName;
 
@@ -404,8 +379,7 @@ export async function clickNext(that) {
                         );
 
                         that.accounts =
-                            JSON.parse(localStorage.getItem("accounts")) || []; //||[]很重要
-                        //去除地址重复的
+                            JSON.parse(localStorage.getItem("accounts")) || [];
                         for (let i in that.accounts) {
                             if (that.accounts[i].address == acct._address) {
                                 that.flag1 = true;
@@ -416,7 +390,7 @@ export async function clickNext(that) {
                                         "accounts",
                                         JSON.stringify(that.accounts)
                                     );
-                                    that.$store.commit("getWalletType", "BHP"); //新导入的钱包进入首页显示新创建的钱包
+                                    that.$store.commit("getWalletType", "BHP");
                                     that.$router.replace({
                                         path: "/indexHome/myWallet",
                                         query: {
@@ -429,7 +403,6 @@ export async function clickNext(that) {
                             }
                         }
 
-                        //进入确认导入页面
                         if (!that.flag1) {
                             that.$store.commit("getNewLeadWallet", that.createWalletObj);
 
@@ -441,12 +414,10 @@ export async function clickNext(that) {
                             });
                         }
                     } else if (that.$route.query.leadWallet == "leadWalletETH") {
-                        if (that.leadPrivateKey.length == 64 || that.leadPrivateKey.length == 66) { //0x10~0x19可以导入钱包
-
+                        if (that.leadPrivateKey.length == 64 || that.leadPrivateKey.length == 66) {
                             if (that.leadPrivateKey.substr(0, 2) != "0x") {
                                 that.leadPrivateKey = "0x" + that.leadPrivateKey;
                             }
-                            //要有0x才可以成功导入ETH钱包
                             var accountETH = new ethers.Wallet(that.leadPrivateKey);
                             that.createWalletObj["address"] = accountETH.address;
                             that.createWalletObj["name"] = that.inputName;
@@ -459,9 +430,7 @@ export async function clickNext(that) {
                             );
                             that.createWalletObj["privateKey"] = privateKey;
                             that.accounts =
-                                JSON.parse(localStorage.getItem("accountsETH")) || []; //||[]很重要
-
-                            //去除地址重复的
+                                JSON.parse(localStorage.getItem("accountsETH")) || [];
                             for (let i in that.accounts) {
                                 if (that.accounts[i].address == accountETH.address) {
                                     that.flag1 = true;
@@ -472,7 +441,7 @@ export async function clickNext(that) {
                                             "accountsETH",
                                             JSON.stringify(that.accounts)
                                         );
-                                        that.$store.commit("getWalletType", "ETH"); //新导入的钱包进入首页显示新创建的钱包
+                                        that.$store.commit("getWalletType", "ETH");
                                         that.$router.replace({
                                             path: "/indexHome/myWallet",
                                             query: {
@@ -484,7 +453,6 @@ export async function clickNext(that) {
                                     }
                                 }
                             }
-                            //进入确认导入页面
                             if (!that.flag1) {
                                 that.$store.commit("getNewLeadWallet", that.createWalletObj);
                                 that.$router.push({
@@ -501,7 +469,6 @@ export async function clickNext(that) {
 
                     } else if (that.$route.query.leadWallet == "leadWalletBTC") {
                         const network = bitcoin.networks.bitcoin;
-                        // SW
                         const keyPair = bitcoin.ECPair.fromWIF(
                             that.leadPrivateKey, network
                         );
@@ -519,9 +486,7 @@ export async function clickNext(that) {
                             that.inputPwd
                         );
                         that.accounts =
-                            JSON.parse(localStorage.getItem("accountsBTC")) || []; //||[]很重要
-
-                        //去除地址重复的
+                            JSON.parse(localStorage.getItem("accountsBTC")) || [];
                         for (let i in that.accounts) {
                             if (that.accounts[i].address == p2wpkh.address) {
                                 that.flag1 = true;
@@ -532,7 +497,7 @@ export async function clickNext(that) {
                                         "accountsBTC",
                                         JSON.stringify(that.accounts)
                                     );
-                                    that.$store.commit("getWalletType", "BTC"); //新导入的钱包进入首页显示新创建的钱包
+                                    that.$store.commit("getWalletType", "BTC");
                                     that.$router.replace({
                                         path: "/indexHome/myWallet",
                                         query: {
@@ -545,7 +510,6 @@ export async function clickNext(that) {
                             }
                         }
 
-                        //进入确认导入页面
                         if (!that.flag1) {
                             that.$store.commit("getNewLeadWallet", that.createWalletObj);
                             that.$router.push({

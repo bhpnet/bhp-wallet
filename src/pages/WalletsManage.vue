@@ -4,184 +4,184 @@
       <van-loading color="#1989fa" class="loadImg" />
     </div>
     <img @click="clickReturn()" src="../assets/img/return1.png" alt />
-    <h2 style="font-weight:bold" v-text="$t('message.text1')">钱包管理</h2>
+    <h2 style="font-weight: bold" v-text="$t('message.text1')">钱包管理</h2>
     <div class="maxDiv">
       <div class="main">
         <van-swipe-cell
-          v-show="walletType=='ETH'"
+          v-show="walletType == 'ETH'"
           class="swipeCell"
-          v-for="(v,i) of this.allWalletListETH"
+          v-for="(v, i) of this.allWalletListETH"
           :key="v.address"
         >
           <div class="box ETHbox" @click="showTrue(i)">
             <div class="walletName">
-              <span>{{v.name}}</span>
+              <span>{{ v.name }}</span>
               <i class="BHPi" v-text="$t('message.text90')">Backup</i>
             </div>
 
             <p>
-              <span>{{v.assets?v.assets.toFixed(4):0}}</span> ETH
+              <span>{{ v.assets ? v.assets.toFixed(4) : 0 }}</span> ETH
             </p>
             <p class="address">
               <img src="../assets/img/copy.png" alt />
 
-              <span>{{v.address}}</span>
+              <span>{{ v.address }}</span>
             </p>
           </div>
 
           <template #right>
-            <van-button square type="danger" @click="deleteWalletETH(v,i)">
+            <van-button square type="danger" @click="deleteWalletETH(v, i)">
               <img src="../assets/img/deleteImg.png" alt />
-              <span>{{$t('message.text24')}}</span>
+              <span>{{ $t("message.text24") }}</span>
             </van-button>
           </template>
         </van-swipe-cell>
         <van-swipe-cell
-          v-show="walletType=='BTC'"
+          v-show="walletType == 'BTC'"
           class="swipeCell"
-          v-for="(v,i) of this.allWalletListBTC"
+          v-for="(v, i) of this.allWalletListBTC"
           :key="v.address"
         >
           <div class="box BTCbox" @click="showTrue(i)">
             <div class="walletName">
-              <span>{{v.name}}</span>
+              <span>{{ v.name }}</span>
               <i class="BHPi" v-text="$t('message.text90')">Backup</i>
             </div>
 
             <p>
-              <span>{{v.assets?v.assets.toFixed(4):0}}</span> BTC
+              <span>{{ v.assets ? v.assets.toFixed(4) : 0 }}</span> BTC
             </p>
             <p class="address">
               <img src="../assets/img/copy.png" alt />
 
-              <span>{{v.address}}</span>
+              <span>{{ v.address }}</span>
             </p>
           </div>
 
           <template #right>
-            <van-button square type="danger" @click="deleteWalletBTC(v,i)">
+            <van-button square type="danger" @click="deleteWalletBTC(v, i)">
               <img src="../assets/img/deleteImg.png" alt />
-              <span>{{$t('message.text24')}}</span>
+              <span>{{ $t("message.text24") }}</span>
             </van-button>
           </template>
         </van-swipe-cell>
         <van-swipe-cell
-          v-show="walletType=='BHP'"
+          v-show="walletType == 'BHP'"
           class="swipeCell"
-          v-for="(v,i) of this.allWalletList"
+          v-for="(v, i) of this.allWalletList"
           :key="v.address"
         >
           <div class="box BHPbox" @click="showTrue(i)">
             <div class="walletName">
-              <span>{{v.name}}</span>
+              <span>{{ v.name }}</span>
               <i class="BHPi" v-text="$t('message.text90')">Backup</i>
             </div>
 
             <p>
-              <span>{{v.assets?v.assets.toFixed(4):0}}</span> BHP
+              <span>{{ v.assets ? v.assets.toFixed(4) : 0 }}</span> BHP
             </p>
             <p class="address">
               <img src="../assets/img/copy.png" alt />
 
-              <span>{{v.address}}</span>
+              <span>{{ v.address }}</span>
             </p>
           </div>
 
           <template #right>
-            <van-button square type="danger" @click="deleteWallet1(v,i)">
+            <van-button square type="danger" @click="deleteWallet1(v, i)">
               <img src="../assets/img/deleteImg.png" alt />
-              <span>{{$t('message.text24')}}</span>
+              <span>{{ $t("message.text24") }}</span>
             </van-button>
           </template>
         </van-swipe-cell>
 
         <van-swipe-cell
-          v-show="walletType=='BHP2'"
+          v-show="walletType == 'BHP2'"
           class="swipeCell"
-          v-for="(v,i) of this.allWalletList2"
+          v-for="(v, i) of this.allWalletList2"
           :key="v.address"
         >
           <div class="box BHP2box" @click="showTrue(i)">
             <div class="walletName">
-              <span>{{v.name}}</span>
+              <span>{{ v.name }}</span>
 
               <i class="BHP2i" v-text="$t('message.text90')">Backup</i>
             </div>
 
             <p>
-              <span>{{v.assets?v.assets.toFixed(4):0}}</span> BHP
+              <span>{{ v.assets ? v.assets.toFixed(4) : 0 }}</span> BHP
             </p>
             <p class="address">
               <img src="../assets/img/copy.png" alt />
 
-              <span>{{v.address}}</span>
+              <span>{{ v.address }}</span>
             </p>
           </div>
 
           <template #right>
-            <van-button square type="danger" @click="deleteWallet2(v,i)">
+            <van-button square type="danger" @click="deleteWallet2(v, i)">
               <img src="../assets/img/deleteImg.png" alt />
-              <span>{{$t('message.text24')}}</span>
+              <span>{{ $t("message.text24") }}</span>
             </van-button>
           </template>
         </van-swipe-cell>
 
         <van-swipe-cell
-          v-show="walletType=='FIL'"
+          v-show="walletType == 'FIL'"
           class="swipeCell"
-          v-for="(v,i) of this.allWalletListFIL"
+          v-for="(v, i) of this.allWalletListFIL"
           :key="v.address"
         >
           <div class="box FILbox" @click="showTrue(i)">
             <div class="walletName">
-              <span>{{v.name}}</span>
+              <span>{{ v.name }}</span>
 
               <i class="FILi" v-text="$t('message.text90')">Backup</i>
             </div>
 
             <p>
-              <span>{{v.assets?v.assets.toFixed(4):0}}</span> BHP
+              <span>{{ v.assets ? v.assets.toFixed(4) : 0 }}</span> BHP
             </p>
             <p class="address">
               <img src="../assets/img/copy.png" alt />
 
-              <span>{{v.address}}</span>
+              <span>{{ v.address }}</span>
             </p>
           </div>
 
           <template #right>
-            <van-button square type="danger" @click="deleteWalletFIL(v,i)">
+            <van-button square type="danger" @click="deleteWalletFIL(v, i)">
               <img src="../assets/img/deleteImg.png" alt />
-              <span>{{$t('message.text24')}}</span>
+              <span>{{ $t("message.text24") }}</span>
             </van-button>
           </template>
         </van-swipe-cell>
       </div>
       <div class="changeDiv">
         <img
-          v-show="walletType=='BTC'"
-          :class="walletType=='BTC'?'active':''"
+          v-show="walletType == 'BTC'"
+          :class="walletType == 'BTC' ? 'active' : ''"
           @click="changeWalletsBox('BTC')"
           src="../assets/img/BTC.png"
           alt
         />
         <img
-          v-show="walletType!='BTC'"
-          :class="walletType=='BTC'?'active':''"
+          v-show="walletType != 'BTC'"
+          :class="walletType == 'BTC' ? 'active' : ''"
           @click="changeWalletsBox('BTC')"
           src="../assets/img/BTC1.png"
           alt
         />
         <img
-          v-show="walletType=='ETH'"
-          :class="walletType=='ETH'?'active':''"
+          v-show="walletType == 'ETH'"
+          :class="walletType == 'ETH' ? 'active' : ''"
           @click="changeWalletsBox('ETH')"
           src="../assets/img/ETCsider.png"
           alt
         />
         <img
-          v-show="walletType!='ETH'"
-          :class="walletType=='ETH'?'active':''"
+          v-show="walletType != 'ETH'"
+          :class="walletType == 'ETH' ? 'active' : ''"
           @click="changeWalletsBox('ETH')"
           src="../assets/img/ETCsider1.png"
           alt
@@ -201,15 +201,15 @@
           alt
         /> -->
         <img
-          v-show="walletType=='BHP'"
-          :class="walletType=='BHP'?'active':''"
+          v-show="walletType == 'BHP'"
+          :class="walletType == 'BHP' ? 'active' : ''"
           @click="changeWalletsBox('BHP')"
           src="../assets/img/BHPsider.png"
           alt
         />
         <img
-          v-show="walletType!='BHP'"
-          :class="walletType=='BHP'?'active':''"
+          v-show="walletType != 'BHP'"
+          :class="walletType == 'BHP' ? 'active' : ''"
           @click="changeWalletsBox('BHP')"
           src="../assets/img/BHPsider1.png"
           alt
@@ -234,11 +234,11 @@
       <div class="createOrLead1">
         <button @click="createWallet()">
           <img src="../assets/img/createWallet.png" />
-          {{$t('message.text16')}}
+          {{ $t("message.text16") }}
         </button>
         <button @click="leadWallet()" class="leadBtn">
           <img src="../assets/img/leadWallet.png" />
-          {{$t('message.text17')}}
+          {{ $t("message.text17") }}
         </button>
       </div>
     </div>
@@ -246,7 +246,11 @@
       <ul class="backUp">
         <li v-show="hideKey" @click="backUpKey()" v-text="$t('message.text3500')"></li>
         <li @click="backUpBip()" v-text="$t('message.text35')"></li>
-        <li @click="show = false" v-text="$t('message.text04')" style="color:#FF3D3D"></li>
+        <li
+          @click="show = false"
+          v-text="$t('message.text04')"
+          style="color: #ff3d3d"
+        ></li>
       </ul>
     </van-popup>
 
@@ -278,7 +282,7 @@ import {
   delete1,
   delete2,
   surePWDPrivateKey,
-  surePWDMnemonic
+  surePWDMnemonic,
 } from "../assets/js/index";
 export default {
   created() {
@@ -297,12 +301,9 @@ export default {
     }
     this.allWalletList = JSON.parse(localStorage.getItem("accounts")) || [];
     this.allWalletList2 = JSON.parse(localStorage.getItem("accounts2")) || [];
-    this.allWalletListBTC =
-      JSON.parse(localStorage.getItem("accountsBTC")) || [];
-    this.allWalletListFIL =
-      JSON.parse(localStorage.getItem("accountsFIL")) || [];
-    this.allWalletListETH =
-      JSON.parse(localStorage.getItem("accountsETH")) || [];
+    this.allWalletListBTC = JSON.parse(localStorage.getItem("accountsBTC")) || [];
+    this.allWalletListFIL = JSON.parse(localStorage.getItem("accountsFIL")) || [];
+    this.allWalletListETH = JSON.parse(localStorage.getItem("accountsETH")) || [];
     if (this.allWalletListETH.length != 0) {
       this.walletType = "ETH";
     }
@@ -312,7 +313,7 @@ export default {
     // } else if (this.allWalletListFIL.length != 0) {
     //   this.walletType = "FIL";
     //   // this.hideKey = false;
-    // } 
+    // }
     else if (this.allWalletListBTC.length != 0) {
       this.walletType = "BTC";
     } else {
@@ -322,7 +323,7 @@ export default {
     if (
       this.allWalletList.length == 0 &&
       this.allWalletListETH.length == 0 &&
-      this.allWalletListBTC.length == 0 
+      this.allWalletListBTC.length == 0
       // &&this.allWalletList2.length == 0 &&
       // this.allWalletListFIL.length == 0
     ) {
@@ -374,14 +375,12 @@ export default {
       this.show2 = true;
       this.show = false;
     },
-    //备份私钥输入密码
     surePWD1() {
       surePWDPrivateKey(this);
     },
-    //备份助记词输入密码
     surePWD2() {
       surePWDMnemonic(this);
-    }
+    },
   },
   data() {
     return {
@@ -404,9 +403,9 @@ export default {
       msg2: "Are you sure to delete?",
       msg11: "Confirm",
       msg33: "Cancel",
-      hideKey: true //若是BHP2.0，就隐藏备份私钥
+      hideKey: true,
     };
-  }
+  },
 };
 </script>
 
@@ -425,7 +424,6 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    // max-height: calc(100vh - 550px);
 
     .main {
       max-height: calc(100vh - 400px);
@@ -439,7 +437,7 @@ export default {
         .box {
           width: 548px;
           height: 234px;
-          // background: blue;
+
           box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.1);
           border-radius: 22px;
           margin-bottom: 30px;
@@ -651,7 +649,6 @@ export default {
     }
   }
   .van-popup {
-    // height: 354px;
     background: #ffffff;
     box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.12);
     border-radius: 24px 24px 0px 0px;

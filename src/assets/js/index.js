@@ -1,5 +1,3 @@
-//这些都会直接引入filecoin.js 警告造成卡顿
-
 export {
     deleteETH,
     deleteBTC,

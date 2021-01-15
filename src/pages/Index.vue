@@ -1,14 +1,22 @@
 <template>
   <div class="home">
     <div @click="toOpenSelect()" class="language">
-      <span class="selectSpan">{{language}}</span>
+      <span class="selectSpan">{{ language }}</span>
       <i></i>
       <div v-show="hide" class="selectDiv">
         <div class="selectDiv1">
-          <span :class="lang=='cn'?'active':''" @click="toCNorEN('cn','简体中文')">简体中文</span>
-          <span :class="lang=='en'?'active':''" @click="toCNorEN('en','English')">English</span>
-          <span :class="lang=='ko'?'active':''" @click="toCNorEN('ko','한국어')">한국어</span>
-          <span :class="lang=='ja'?'active':''" @click="toCNorEN('ja','日本語')">日本語</span>
+          <span :class="lang == 'cn' ? 'active' : ''" @click="toCNorEN('cn', '简体中文')"
+            >简体中文</span
+          >
+          <span :class="lang == 'en' ? 'active' : ''" @click="toCNorEN('en', 'English')"
+            >English</span
+          >
+          <span :class="lang == 'ko' ? 'active' : ''" @click="toCNorEN('ko', '한국어')"
+            >한국어</span
+          >
+          <span :class="lang == 'ja' ? 'active' : ''" @click="toCNorEN('ja', '日本語')"
+            >日本語</span
+          >
         </div>
       </div>
     </div>
@@ -19,7 +27,9 @@
     </p>
 
     <button @click="createWallet()" v-text="$t('message.text16')">创建钱包</button>
-    <button class="leadBtn" @click="leadWallet()" v-text="$t('message.text17')">导入钱包</button>
+    <button class="leadBtn" @click="leadWallet()" v-text="$t('message.text17')">
+      导入钱包
+    </button>
   </div>
 </template>
 
@@ -28,28 +38,25 @@ export default {
   created() {
     this.lang = localStorage.lang == undefined ? "en" : localStorage.lang;
     localStorage.setItem("lang", this.lang);
-    switch(this.lang){
-      case'cn':
-      this.language = '简体中文'
-      break
-      case'en':
-      this.language = 'English'
-      break
-      case'ko':
-      this.language = '한국어'
-      break
-      case'ja':
-      this.language = '日本語'
-      break
+    switch (this.lang) {
+      case "cn":
+        this.language = "简体中文";
+        break;
+      case "en":
+        this.language = "English";
+        break;
+      case "ko":
+        this.language = "한국어";
+        break;
+      case "ja":
+        this.language = "日本語";
+        break;
     }
     this.allWalletList = JSON.parse(localStorage.getItem("accounts")) || [];
     this.allWalletList2 = JSON.parse(localStorage.getItem("accounts2")) || [];
-    this.allWalletListFIL =
-      JSON.parse(localStorage.getItem("accountsFIL")) || [];
-    this.allWalletListBTC =
-      JSON.parse(localStorage.getItem("accountsBTC")) || [];
-    this.allWalletListETH =
-      JSON.parse(localStorage.getItem("accountsETH")) || [];
+    this.allWalletListFIL = JSON.parse(localStorage.getItem("accountsFIL")) || [];
+    this.allWalletListBTC = JSON.parse(localStorage.getItem("accountsBTC")) || [];
+    this.allWalletListETH = JSON.parse(localStorage.getItem("accountsETH")) || [];
     if (
       this.allWalletList.length != 0 ||
       this.allWalletListETH.length != 0 ||
@@ -60,8 +67,8 @@ export default {
       this.$router.replace({
         path: "/indexHome/myWallet",
         query: {
-          address: "OpenToIndexHome"
-        }
+          address: "OpenToIndexHome",
+        },
       });
     } else {
       this.status = true;
@@ -75,9 +82,9 @@ export default {
       allWalletListFIL: [],
       allWalletListBTC: [],
       language: "English",
-      lang:'en',
+      lang: "en",
       status: false,
-      hide: false
+      hide: false,
     };
   },
   methods: {
@@ -89,8 +96,8 @@ export default {
         this.$router.push({
           path: "/createWallet",
           query: {
-            createWallet: "createWalletAll"
-          }
+            createWallet: "createWalletAll",
+          },
         });
       } else {
         this.$router.push("/changeCreateWallet");
@@ -99,15 +106,14 @@ export default {
     leadWallet() {
       this.$router.push("/changeLeadWallet");
     },
-    toCNorEN(e,language) {
+    toCNorEN(e, language) {
       this.lang = e;
-      this.language = language
+      this.language = language;
       localStorage.setItem("lang", e);
       this.$i18n.locale = e;
-      // window.location.reload();
-      this.hide = true
-    }
-  }
+      this.hide = true;
+    },
+  },
 };
 </script>
 

@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import i18n from './i18n/i18n'
-import './rem';
 Vue.config.productionTip = false
 import Clipboard from 'v-clipboard'
 Vue.use(Clipboard)

@@ -1,22 +1,22 @@
-    <template>
+<template>
   <div class="receiving">
     <img @click="clickReturn()" src="../assets/img/return1.png" alt />
-    <h2 style="font-weight:bold" v-text="$t('message.text44')">收款</h2>
+    <h2 style="font-weight: bold" v-text="$t('message.text44')">收款</h2>
 
     <van-popup
       class="popup"
       v-model="show"
       position="right"
-      :style="{ height: '100%',width:'80% '}"
+      :style="{ height: '100%', width: '80% ' }"
     >
       <h2 v-text="$t('message.text38')">钱包列表</h2>
     </van-popup>
-    <div class="walletName">{{$route.query.name}}</div>
+    <div class="walletName">{{ $route.query.name }}</div>
     <div ref="qrCodeUrl" class="codeImg">
       <img class="qrLogo" :src="qrImg" alt />
     </div>
 
-    <span class="addressMain">{{address}}</span>
+    <span class="addressMain">{{ address }}</span>
     <div class="bottomDiv">
       <button
         class="copy"
@@ -40,14 +40,14 @@ import QRCode from "qrcodejs2";
 import { Toast } from "vant";
 
 export default {
-   name: "myWallet3",
+  name: "myWallet3",
   data() {
     return {
       show: false,
       allWalletList: [],
       msg1: "Copy succeeded!",
       msg2: "Copy failed! ",
-      qrImg: ""
+      qrImg: "",
     };
   },
   created() {
@@ -66,7 +66,7 @@ export default {
       this.qrImg = require("../assets/img/ETCsider.png");
     } else if (this.$route.query.walletType == "FIL") {
       this.qrImg = require("../assets/img/FIL.png");
-    }else if (this.$route.query.walletType == "BTC") {
+    } else if (this.$route.query.walletType == "BTC") {
       this.qrImg = require("../assets/img/BTC.png");
     }
     this.address = this.$route.query.address;
@@ -85,12 +85,12 @@ export default {
 
     creatQrCode(address) {
       var qrcode = new QRCode(this.$refs.qrCodeUrl, {
-        text: address, // 需要转换为二维码的内容
+        text: address,
         width: 198,
         height: 198,
         colorDark: "#000000",
         colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
+        correctLevel: QRCode.CorrectLevel.H,
       });
     },
     createWallet() {
@@ -104,8 +104,8 @@ export default {
     },
     showPopup() {
       this.show = true;
-    }
-  }
+    },
+  },
 };
 </script>
 

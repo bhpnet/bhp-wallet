@@ -4,22 +4,22 @@
       <img class="return" @click="clickReturn()" src="../assets/img/return1.png" alt />
       <img class="add" @click="addShow = true" src="../assets/img/add.png" alt />
     </div>
-    <h2 style="font-weight:bold" v-text="$t('message.text5')">地址管理</h2>
+    <h2 style="font-weight: bold" v-text="$t('message.text5')">地址管理</h2>
     <ul>
-      <van-swipe-cell class="swipeCell" v-for="(v,i) in this.addressList" :key="i">
+      <van-swipe-cell class="swipeCell" v-for="(v, i) in this.addressList" :key="i">
         <li @click="toTransfer(v)">
-          <span class="addName">{{v.addName}}</span>
-          <span class="address">{{v.addAddress}}</span>
-          <span class="address">{{v.addRemark}}</span>
+          <span class="addName">{{ v.addName }}</span>
+          <span class="address">{{ v.addAddress }}</span>
+          <span class="address">{{ v.addRemark }}</span>
         </li>
         <template #right>
           <van-button @click="deleteBtn(i)" square type="danger">
             <img src="../assets/img/deleteImg.png" alt />
-            <span>{{$t('message.text24')}}</span>
+            <span>{{ $t("message.text24") }}</span>
           </van-button>
-          <van-button @click="EditAddress(v,i)" square type="primary" class="lastBtn">
+          <van-button @click="EditAddress(v, i)" square type="primary" class="lastBtn">
             <img src="../assets/img/editImg.png" alt />
-            <span>{{$t('message.text25')}}</span>
+            <span>{{ $t("message.text25") }}</span>
           </van-button>
         </template>
       </van-swipe-cell>
@@ -49,10 +49,9 @@
           />
         </li>
       </ul>
-      <!-- <button @click="saveAddAddress()" v-text="$t('message.text7')">保存</button> -->
       <div class="bottomDiv">
-        <span @click="addShow = false">{{$t('message.text69')}}</span>
-        <span @click="saveAddAddress()">{{$t('message.text68')}}</span>
+        <span @click="addShow = false">{{ $t("message.text69") }}</span>
+        <span @click="saveAddAddress()">{{ $t("message.text68") }}</span>
       </div>
     </van-popup>
 
@@ -80,10 +79,9 @@
           />
         </li>
       </ul>
-      <!-- <button  v-text="$t('message.text7')">保存</button> -->
       <div class="bottomDiv">
-        <span @click="editShow = false">{{$t('message.text69')}}</span>
-        <span @click="saveEditAddress()">{{$t('message.text68')}}</span>
+        <span @click="editShow = false">{{ $t("message.text69") }}</span>
+        <span @click="saveEditAddress()">{{ $t("message.text68") }}</span>
       </div>
     </van-popup>
   </div>
@@ -106,7 +104,7 @@ export default {
 
       addressList: [],
       newAddressObject: {},
-      index: ""
+      index: "",
     };
   },
   created() {
@@ -144,8 +142,8 @@ export default {
           query: {
             address1: that.$route.query.address1,
             name: that.$route.query.name,
-            toAddress: val.addAddress
-          }
+            toAddress: val.addAddress,
+          },
         });
       } else if (that.$route.query.address2) {
         that.$router.push({
@@ -153,8 +151,8 @@ export default {
           query: {
             address2: that.$route.query.address2,
             name: that.$route.query.name,
-            toAddress: val.addAddress
-          }
+            toAddress: val.addAddress,
+          },
         });
       } else if (that.$route.query.addressETH) {
         that.$router.push({
@@ -162,8 +160,8 @@ export default {
           query: {
             addressETH: that.$route.query.addressETH,
             name: that.$route.query.name,
-            toAddress: val.addAddress
-          }
+            toAddress: val.addAddress,
+          },
         });
       } else if (that.$route.query.addressFIL) {
         that.$router.push({
@@ -171,17 +169,17 @@ export default {
           query: {
             addressFIL: that.$route.query.addressFIL,
             name: that.$route.query.name,
-            toAddress: val.addAddress
-          }
+            toAddress: val.addAddress,
+          },
         });
-      }else if (that.$route.query.addressBTC) {
+      } else if (that.$route.query.addressBTC) {
         that.$router.push({
           path: "/indexHome/transfer",
           query: {
             addressBTC: that.$route.query.addressBTC,
             name: that.$route.query.name,
-            toAddress: val.addAddress
-          }
+            toAddress: val.addAddress,
+          },
         });
       }
     },
@@ -195,15 +193,12 @@ export default {
       Dialog.confirm({
         message: this.msg2,
         confirmButtonText: this.msg11,
-        cancelButtonText: this.msg33
+        cancelButtonText: this.msg33,
       }).then(() => {
         for (let i in this.addressList) {
           if (index == i) {
             this.addressList.splice(i, 1);
-            localStorage.setItem(
-              "addressList",
-              JSON.stringify(this.addressList)
-            );
+            localStorage.setItem("addressList", JSON.stringify(this.addressList));
           }
         }
       });
@@ -214,7 +209,7 @@ export default {
         this.newAddressObject["addName"] = this.addName;
         this.newAddressObject["addAddress"] = this.addAddress;
         this.newAddressObject["addRemark"] = this.addRemark;
-        this.addressList = JSON.parse(localStorage.getItem("addressList")) || []; //||[]很重要
+        this.addressList = JSON.parse(localStorage.getItem("addressList")) || [];
         this.addressList.push(this.newAddressObject);
         localStorage.setItem("addressList", JSON.stringify(this.addressList));
         this.getAddressList();
@@ -243,8 +238,8 @@ export default {
       localStorage.setItem("addressList", JSON.stringify(this.addressList));
 
       this.editShow = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -379,7 +374,6 @@ export default {
     padding: 0;
   }
   ul {
-    // padding: 0 38px;
     width: 100%;
     .swipeCell {
       height: 249px;

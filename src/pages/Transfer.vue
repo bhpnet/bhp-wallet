@@ -10,11 +10,7 @@
       safe-area-inset-bottom
     />
     <div class="loading" v-show="loading">
-      <van-loading color="#1989fa" class="loadImg" vertical>
-        <!-- <span
-          v-text="$t('message.text74')"
-        >转账交易已发起,大约需要15秒,请耐心等待...Transfer transaction has been initiated. It will take about 15 seconds. Please wait patiently</span>-->
-      </van-loading>
+      <van-loading color="#1989fa" class="loadImg" vertical> </van-loading>
     </div>
     <div class="topImg">
       <img @click="clickReturn()" src="../assets/img/return1.png" alt />
@@ -251,7 +247,7 @@ import {
   btc_getBalance,
   btc_sendTransaction,
   btc_getSatoshis,
-  btc_validateaddress
+  btc_validateaddress,
 } from "../api/api";
 import Utils from "../assets/js/utils.js";
 import { Toast, DropdownMenu, DropdownItem, RadioGroup, Radio } from "vant";
@@ -542,14 +538,14 @@ export default {
       btcFee: 0,
       bytes: "",
       Satoshi: "",
-      selcetSatoshi: "", //btc设置的速率
-      selcetSatoshiRadio: "", //选择框的value
-      satoshiCustom: 10, //btc自定义速率
+      selcetSatoshi: "",
+      selcetSatoshiRadio: "",
+      satoshiCustom: 10,
       gasPrice: "",
       gasLimit: 21000,
       gasPriceCustom: 10,
       gasLimitCustom: 21000,
-      gasLimitRadio: "", //eth选择框的value
+      gasLimitRadio: "",
       logoImg: "",
       account_number: "",
       sequence: "",
@@ -574,7 +570,7 @@ export default {
       amount: 0,
       unspent: [],
       txrefs: [],
-      allAmount: 0, //BTCUTXO总额
+      allAmount: 0,
       txHex: "",
       inputs: [],
       _privateKey: "",
@@ -692,7 +688,6 @@ export default {
         asset: "ETH",
       };
 
-      //获取ETH gasPrice
       eth_getGasPrice().then((res) => {
         if (res.data) {
           this.transferSpeed = res.data;
@@ -744,8 +739,6 @@ export default {
       this.$refs.costI.style.backgroundSize = "cover";
     },
     selcetRadio() {
-      //进入页面就会触发，赋值
-
       this.gasPriceCustom = 10;
       this.gasLimitCustom = 21000;
       this.lastLowShow = false;
@@ -760,8 +753,6 @@ export default {
     selcetRadioBTC() {
       this.selcetSatoshi = this.selcetSatoshiRadio;
 
-      // //进入页面就会触发，赋值
-      // this.satoshiCustom = 10000;
       if (this.selcetSatoshiRadio != "10000") {
         this.radioInputShowBTC = false;
       } else {
@@ -787,9 +778,7 @@ export default {
           web3 = await new Web3(web3.currentProvider);
         } else {
           web3 = await new Web3(
-            new Web3.providers.HttpProvider(
-              "https://mrpc.bhpnet.io/eth"
-            )
+            new Web3.providers.HttpProvider("https://mrpc.bhpnet.io/eth")
           );
         }
         let that = this;
@@ -818,7 +807,6 @@ export default {
       this.walletType = val;
     },
 
-    //获取FIL资产
     async assetFIL() {
       const { HttpJsonRpcConnector, HttpJsonRpcWalletProvider } = require("filecoin.js");
       const connector = new HttpJsonRpcConnector({
@@ -826,7 +814,6 @@ export default {
         token:
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc",
       });
-      //查询资产
       let rpc = new HttpJsonRpcWalletProvider(connector);
       let res = await rpc.getBalance(this.localAddress);
       if (res) {
@@ -835,7 +822,6 @@ export default {
         this.amount = 0;
       }
     },
-    //获取BTC资产
     assetBTC(address) {
       btc_getBalance(address).then((res) => {
         if (res.data.txrefs) {
@@ -856,7 +842,6 @@ export default {
         }
       });
     },
-    //获取以太坊资产
     assetETH(address) {
       eth_getBalance(address).then((res) => {
         if (res.data.result) {
@@ -866,7 +851,6 @@ export default {
         }
       });
     },
-    //查询BHP余额和UTXO
     asset(address) {
       bhp_getBalance(address).then((res) => {
         if (res.data.result) {
@@ -875,7 +859,6 @@ export default {
         }
       });
     },
-    //查询BHP2.0
     asset2(address) {
       bhp2_getBalance(address).then((res) => {
         if (res.data.result.value.coins.length > 0) {
@@ -891,119 +874,106 @@ export default {
     MakeTransaction1() {
       var that = this;
       let privateKey = Utils.decryptContent(this.privateKey, this.password);
-     
-        for (let i in this.unspent) {
-          var input = {
-            //交易输入
-            prevHash: this.unspent[i].txid, //交易ID
-            prevIndex: this.unspent[i].n, //UTXO索引
-            assetId: "13f76fabfe19f3ec7fd54d63179a156bafc44afc53a7f07a7a15f6724c0aa854", //资产ID 这里是BHP资产对应的ID号
-            value: this.unspent[i].value, //UTXO金额
-            address: this.localAddress, //UTXO所属地址
-          };
-          this.inputs.push(input);
-        }
-        var config = {
-          inputs: this.inputs, //交易输入
-          assetId: "13f76fabfe19f3ec7fd54d63179a156bafc44afc53a7f07a7a15f6724c0aa854", //转账资产ID
-          toAddress: this.inputAddress, //转账目标地址
-          value: parseFloat(this.inputAmount), //转账金额
-          changeAddress: this.localAddress, //转账找零地址
-          bhpFeeAddress: this.localAddress, //转代币时收取手续费的地址，暂时未收取手续费，可忽略
-          priKeys: [privateKey], //所有输入地址的私钥，用于交易签名，未传入私钥则返回未签名的交易数据
+
+      for (let i in this.unspent) {
+        var input = {
+          prevHash: this.unspent[i].txid,
+          prevIndex: this.unspent[i].n,
+          assetId: "13f76fabfe19f3ec7fd54d63179a156bafc44afc53a7f07a7a15f6724c0aa854",
+          value: this.unspent[i].value,
+          address: this.localAddress,
         };
-        that.loading = true;
+        this.inputs.push(input);
+      }
+      var config = {
+        inputs: this.inputs,
+        assetId: "13f76fabfe19f3ec7fd54d63179a156bafc44afc53a7f07a7a15f6724c0aa854",
+        toAddress: this.inputAddress,
+        value: parseFloat(this.inputAmount),
+        changeAddress: this.localAddress,
+        bhpFeeAddress: this.localAddress,
+        priKeys: [privateKey],
+      };
+      that.loading = true;
 
-        config = Bhp.api.makeTransaction(config);
-        this.txHex = config.txHex;
-        bhp_sendTransaction(this.txHex)
-          .then((res) => {
-            // setTimeout(() => {
-            that.loading = false;
-            Toast.success(that.msg1);
+      config = Bhp.api.makeTransaction(config);
+      this.txHex = config.txHex;
+      bhp_sendTransaction(this.txHex)
+        .then((res) => {
+          that.loading = false;
+          Toast.success(that.msg1);
 
-            that.$router.replace({
-              path: "/transferRecords1", //看去钱包主页，还是跳转去详情页面
-              query: {
-                address1: that.$route.query.address1,
-              },
-            });
-            // }, 15000);
-          })
-          .catch((err) => {
-            Toast.fail(this.msg4);
-            this.password = "";
-            this.loading = false;
+          that.$router.replace({
+            path: "/transferRecords1",
+            query: {
+              address1: that.$route.query.address1,
+            },
           });
+        })
+        .catch((err) => {
+          Toast.fail(this.msg4);
+          this.password = "";
+          this.loading = false;
+        });
       this.password = "";
     },
-    //BTC转账
     MakeTransactionBTC() {
       let privateKey = Utils.decryptContent(this.privateKey, this.password);
 
-        var previousTransaction = {
-          tx: [],
+      var previousTransaction = {
+        tx: [],
+      };
+      this.allAmount = 0;
+      for (let i in this.txrefs) {
+        var input = {
+          txid: this.txrefs[i].tx_hash,
+          amount: this.txrefs[i].value,
+          vout: this.txrefs[i].tx_output_n,
         };
-        this.allAmount = 0;
-        for (let i in this.txrefs) {
-          var input = {
-            txid: this.txrefs[i].tx_hash,
-            amount: this.txrefs[i].value,
-            vout: this.txrefs[i].tx_output_n,
-          };
-          previousTransaction.tx.push(input); //全部零钱UTXO
-          this.allAmount += input.amount;
-        }
-        // console.log(this.allAmount);
+        previousTransaction.tx.push(input);
+        this.allAmount += input.amount;
+      }
 
-        let stx = this.buildTransaction(
-          previousTransaction,
-          parseFloat(this.inputAmount),
-          this.inputAddress,
-          privateKey
-        );
-        // console.log(stx);
-        let that = this;
-        that.loading = true;
+      let stx = this.buildTransaction(
+        previousTransaction,
+        parseFloat(this.inputAmount),
+        this.inputAddress,
+        privateKey
+      );
+      let that = this;
+      that.loading = true;
 
-        // BTC广播交易========================================
-        btc_sendTransaction(stx)
-          .then((res) => {
-            // setTimeout(() => {
-            that.loading = false;
-            Toast.success(that.msg1);
+      btc_sendTransaction(stx)
+        .then((res) => {
+          that.loading = false;
+          Toast.success(that.msg1);
 
-            that.$router.replace({
-              path: "/transferRecords1", //看去钱包主页，还是跳转去详情页面
-              query: {
-                addressBTC: that.$route.query.addressBTC,
-              },
-            });
-            // }, 15000);
-          })
-          .catch((err) => {
-            Toast.fail(this.msg4);
-            this.password = "";
-            this.loading = false;
+          that.$router.replace({
+            path: "/transferRecords1",
+            query: {
+              addressBTC: that.$route.query.addressBTC,
+            },
           });
+        })
+        .catch((err) => {
+          Toast.fail(this.msg4);
+          this.password = "";
+          this.loading = false;
+        });
       this.password = "";
     },
     btcToSatoshi(btcAmount) {
       return btcAmount * 1e8;
     },
-    //BTC发送交易
     buildTransaction(previousTransaction, amount, toAddress, privateKey) {
       const tx = new Bitcoin.TransactionBuilder(network);
-      // 弃用警告：TransactionBuilder将在将来删除。 （v6.x.x或更高版本），请改用Psbt类。用法示例可在我们的Github上的transaction-psbt.js集成测试文件中找到。 psbt.ts和psbt.js文件中也提供了高级解释
-      // TransactionBuilder签名方法参数将在v6中更改，请使用TxbSignArg接口
-      const amountSatoshis = parseInt(this.btcToSatoshi(amount)); //转账出去的钱
-      const balanceSatoshis = this.allAmount; //总资产
+      const amountSatoshis = parseInt(this.btcToSatoshi(amount));
+      const balanceSatoshis = this.allAmount;
       const feeSatoshis = this.btcToSatoshi(
         (((this.selcetSatoshi / 1e3) * this.bytes) / 1e8).toFixed(8)
-      ); //手续费
-      const fromAddress = this.localAddress; //找零地址
-      const change = balanceSatoshis - feeSatoshis - amountSatoshis; //找零回来的钱
-      // console.log(balanceSatoshis, feeSatoshis, amountSatoshis, change);
+      );
+      const fromAddress = this.localAddress;
+      const change = balanceSatoshis - feeSatoshis - amountSatoshis;
       const wallet = Bitcoin.ECPair.fromWIF(privateKey, network);
       const pubKey = wallet.publicKey;
       const p2sh = Bitcoin.payments.p2sh({
@@ -1031,60 +1001,56 @@ export default {
       }
       return tx.build().toHex();
     },
-    //FIL转账
     async MakeTransactionFIL() {
       const { MnemonicWalletProvider, HttpJsonRpcConnector } = require("filecoin.js");
 
       let phrase = Utils.decryptContent(this.phrase, this.password);
-      
-        const connector = new HttpJsonRpcConnector({
-          url: "https://mrpc.bhpnet.io/fil/rpc/v0",
-          token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc",
-        });
-        const hdWalletMnemonic = phrase;
-        const hdWalletPassword = "";
-        const hdDerivationPath = `m/44'/461'/0'/0/0`;
-        const walletProvider = new MnemonicWalletProvider(
-          connector,
-          hdWalletMnemonic,
-          hdWalletPassword,
-          hdDerivationPath
-        );
-        const message = await walletProvider.createMessage({
-          From: this.localAddress,
-          // To: "f3v23xwqycr7myhmu7ccfdreqssqozb2zxzatffkv7cdmtpoaobbfc5vi74e7mzc4jlxvvzzj5cuemzyqedsxq",
-          To: this.inputAddress,
-          Value: new BigNumber((this.inputAmount * Math.pow(10, 18)).toString()),
-        });
-        let that = this;
-        let signMessage = await walletProvider.signMessage(message);
-        that.loading = true;
 
-        const msgCid = await walletProvider
-          .sendSignedMessage(signMessage)
-          .then((res) => {
-            that.loading = false;
+      const connector = new HttpJsonRpcConnector({
+        url: "https://mrpc.bhpnet.io/fil/rpc/v0",
+        token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc",
+      });
+      const hdWalletMnemonic = phrase;
+      const hdWalletPassword = "";
+      const hdDerivationPath = `m/44'/461'/0'/0/0`;
+      const walletProvider = new MnemonicWalletProvider(
+        connector,
+        hdWalletMnemonic,
+        hdWalletPassword,
+        hdDerivationPath
+      );
+      const message = await walletProvider.createMessage({
+        From: this.localAddress,
+        To: this.inputAddress,
+        Value: new BigNumber((this.inputAmount * Math.pow(10, 18)).toString()),
+      });
+      let that = this;
+      let signMessage = await walletProvider.signMessage(message);
+      that.loading = true;
 
-            if (res["/"]) {
-              Toast.success(that.msg1);
-              that.$router.replace({
-                path: "/transferRecords1",
-                query: {
-                  addressFIL: that.$route.query.addressFIL,
-                },
-              });
-            }
-          })
-          .catch((err) => {
-            Toast.fail(this.msg4);
-            this.password = "";
-            this.loading = false;
-          });
+      const msgCid = await walletProvider
+        .sendSignedMessage(signMessage)
+        .then((res) => {
+          that.loading = false;
+
+          if (res["/"]) {
+            Toast.success(that.msg1);
+            that.$router.replace({
+              path: "/transferRecords1",
+              query: {
+                addressFIL: that.$route.query.addressFIL,
+              },
+            });
+          }
+        })
+        .catch((err) => {
+          Toast.fail(this.msg4);
+          this.password = "";
+          this.loading = false;
+        });
       this.password = "";
-
     },
-    //2.0转账
     MakeTransaction2() {
       var that = this;
       let crypto = Bhpnet.getCrypto("cosmos");
@@ -1093,56 +1059,51 @@ export default {
 
       let privateKey = Utils.decryptContent(this.privateKey, this.password);
 
-        let builder = Bhpnet.getBuilder("cosmos");
-        let tx = {
-          chain_id: "testing",
-          from: this.localAddress,
-          account_number: this.account_number,
-          sequence: this.sequence,
-          fees: fees,
-          gas: gas,
-          type: Bhpnet.config.cosmos.tx.transfer.type,
-          //mode: Bhpnet.config.iris.mode.try,
-          memo: this.inputRemark,
-          msg: {
-            to: this.inputAddress,
-            coins: [
-              {
-                denom: "abhp",
-                amount: parseFloat(this.inputAmount * 100000000),
-              },
-            ],
-          },
-        };
-        this.loading = true;
-        let stdTx = builder.buildAndSignTx(tx, privateKey);
-        bhp2_sendTransaction(JSON.stringify(stdTx.GetData()))
-          .then((res) => {
-            // setTimeout(() => {
-            that.loading = false;
-            Toast.success(that.msg1);
-            that.$router.replace({
-              path: "/transferRecords1",
-              query: {
-                address2: that.$route.query.address2,
-              },
-            });
-            // }, 15000);
-          })
-          .catch((err) => {
-            Toast.fail(this.msg4);
-            this.password = "";
-            this.loading = false;
+      let builder = Bhpnet.getBuilder("cosmos");
+      let tx = {
+        chain_id: "testing",
+        from: this.localAddress,
+        account_number: this.account_number,
+        sequence: this.sequence,
+        fees: fees,
+        gas: gas,
+        type: Bhpnet.config.cosmos.tx.transfer.type,
+        memo: this.inputRemark,
+        msg: {
+          to: this.inputAddress,
+          coins: [
+            {
+              denom: "abhp",
+              amount: parseFloat(this.inputAmount * 100000000),
+            },
+          ],
+        },
+      };
+      this.loading = true;
+      let stdTx = builder.buildAndSignTx(tx, privateKey);
+      bhp2_sendTransaction(JSON.stringify(stdTx.GetData()))
+        .then((res) => {
+          that.loading = false;
+          Toast.success(that.msg1);
+          that.$router.replace({
+            path: "/transferRecords1",
+            query: {
+              address2: that.$route.query.address2,
+            },
           });
+        })
+        .catch((err) => {
+          Toast.fail(this.msg4);
+          this.password = "";
+          this.loading = false;
+        });
       this.password = "";
     },
-    //ETH转账
     async MakeTransactionETH() {
       var that = this;
       let flog = true;
 
       try {
-        // 在this.MakeTransactionETH()调用外写也要报错，要在这里写try
         var privateKey = Utils.decryptContent(this.privateKey, this.password);
       } catch (err) {
         Toast.fail(this.msg2);
@@ -1150,58 +1111,55 @@ export default {
         flog = false;
       }
       if (flog) {
-          that.loading = true;
-          if (that.selectValue == "ETH") {
-            let wallet = new ethers.Wallet(privateKey); //用私钥导入的没有助记词
-            var provider = new ethers.providers.JsonRpcProvider(
-              "https://mrpc.bhpnet.io/eth"
-            );
+        that.loading = true;
+        if (that.selectValue == "ETH") {
+          let wallet = new ethers.Wallet(privateKey);
+          var provider = new ethers.providers.JsonRpcProvider(
+            "https://mrpc.bhpnet.io/eth"
+          );
 
-            let num = parseFloat(this.inputAmount * 1000000000000000000);
-            var activeWallet = wallet.connect(provider);
-            activeWallet
-              .sendTransaction({
-                to: this.inputAddress,
-                value: "0x" + num.toString(16),
-                gasPrice: "0x" + (that.gasLimit * 1000000).toString(16),
-                gasLimit: that.gasLimit,
-              })
-              .then(function (tx) {
-                that.loading = false;
+          let num = parseFloat(this.inputAmount * 1000000000000000000);
+          var activeWallet = wallet.connect(provider);
+          activeWallet
+            .sendTransaction({
+              to: this.inputAddress,
+              value: "0x" + num.toString(16),
+              gasPrice: "0x" + (that.gasLimit * 1000000).toString(16),
+              gasLimit: that.gasLimit,
+            })
+            .then(function (tx) {
+              that.loading = false;
 
-                // setTimeout(()=>{
-                Toast.success(that.msg1);
-                that.$router.replace({
-                  path: "/transferRecords1",
-                  query: {
-                    addressETH: that.$route.query.addressETH,
-                  },
-                });
-                // }, 15000);
-              })
-              .catch((err) => {
-                that.loading = false;
-                Toast.fail(that.msg4);
-                that.password = "";
+              Toast.success(that.msg1);
+              that.$router.replace({
+                path: "/transferRecords1",
+                query: {
+                  addressETH: that.$route.query.addressETH,
+                },
               });
-          } else {
-            for (let i in that.selectETHlist) {
-              if (that.selectValue == that.selectETHlist[i].name) {
-                await that.transfer(
-                  that.localAddress,
-                  that.inputAddress,
-                  that.inputAmount,
-                  privateKey.substr(2),
-                  that.selectETHlist[i].address, //合约地址
-                  that.selectETHlist[i].decimals //合约资产精度
-                );
-              }
+            })
+            .catch((err) => {
+              that.loading = false;
+              Toast.fail(that.msg4);
+              that.password = "";
+            });
+        } else {
+          for (let i in that.selectETHlist) {
+            if (that.selectValue == that.selectETHlist[i].name) {
+              await that.transfer(
+                that.localAddress,
+                that.inputAddress,
+                that.inputAmount,
+                privateKey.substr(2),
+                that.selectETHlist[i].address,
+                that.selectETHlist[i].decimals
+              );
             }
           }
+        }
         this.password = "";
       }
     },
-    //ETH代币转账: 发送人地址 接受人地址 金额 当前账户私钥,代币合约地址
     async transfer(
       fromAddress,
       toAddress,
@@ -1215,24 +1173,16 @@ export default {
         web3 = await new Web3(web3.currentProvider);
       } else {
         web3 = await new Web3(
-          new Web3.providers.HttpProvider(
-            "https://mrpc.bhpnet.io/eth"
-          )
+          new Web3.providers.HttpProvider("https://mrpc.bhpnet.io/eth")
         );
       }
-      // 定义合约
       let that = this;
       let myContract = new web3.eth.Contract(that.contractAbi, contractAddress);
-      // ethGasLimit
       await web3.eth
         .getTransactionCount(fromAddress, web3.eth.defaultBlock.pending)
         .then(function (nonce) {
-          // console.log("\n当前账户" + fromAddress + "转账" + balance + "给" + toAddress);
-          const Ether = Math.pow(10, parseInt(decimals)); //==================================================
-
-          let balanceEth = new BigNumber(parseFloat(balance) * Ether); //转换成ETH的最小单位数量
-          //代币转账
-          // data的组成，由：0x + 要调用的合约方法的function signature + 要传递的方法参数，每个参数都为64位(对transfer来说，第一个是接收人的地址去掉0x，第二个是代币数量的16进制表示，去掉前面0x，然后补齐为64位)
+          const Ether = Math.pow(10, parseInt(decimals));
+          let balanceEth = new BigNumber(parseFloat(balance) * Ether);
           let data =
             "0x" +
             "a9059cbb" +
@@ -1241,32 +1191,23 @@ export default {
           let rawTx = {
             nonce: web3.utils.toHex(nonce++),
             gasLimit: web3.utils.toHex(that.gasLimit),
-            gasPrice: web3.utils.toHex(1e9) * that.gasPrice, //web3.utils.toHex(1e9) = 1 GWEI = 0.000000001 ETH //一般可调节
-            // 注意这里是代币合约地址
+            gasPrice: web3.utils.toHex(1e9) * that.gasPrice,
             to: contractAddress,
             from: fromAddress,
-            // 调用合约转账value这里留空
             value: "0x00",
-            // data的组成，由：0x + 要调用的合约方法的function signature + 要传递的方法参数，每个参数都为64位(对transfer来说，第一个是接收人的地址去掉0x，第二个是代币数量的16进制表示，去掉前面0x，然后补齐为64位)
             data: data,
           };
 
           let tx = new Tx(rawTx);
           let keyBuf = Buffer.from(privateKey, "hex");
-          //对交易进行签名
           tx.sign(keyBuf);
-          // if (tx.verifySignature()) {
-          //   console.log("Signature 检测成功!");
-          // }
           let serializedTx = tx.serialize().toString("hex");
           that.loading = true;
 
           web3.eth.sendSignedTransaction(
             "0x" + serializedTx.toString("hex"),
             function (err, transactionHash) {
-              // console.log("转账金额(小单位)：" + balanceEth);
               if (!err) {
-                // console.log("\n 交易hash：" + transactionHash);
                 that.loading = false;
 
                 Toast.success(that.msg1);
@@ -1289,7 +1230,6 @@ export default {
           that.loading = false;
         });
     },
-    // 补齐64位，不够前面用0补齐
     addPreZero(num) {
       let t = (num + "").length,
         s = "";
@@ -1308,12 +1248,8 @@ export default {
       this.show1 = false;
       if (this.$route.query.address1) {
         bhp_validateaddress(this.inputAddress).then((res) => {
-          //1.0地址输错，转账方法不会报错，就先校验地址。2.0输错地址，方法会报错，除了密码错误，就只会是地址错误
-          // console.log(res.data.result.isvalid);
           if (res.data.result.isvalid) {
             try {
-              //解密密码输出会报错
-              //1.0转账方法
               this.MakeTransaction1();
             } catch (err) {
               this.loading = false;
@@ -1326,10 +1262,8 @@ export default {
         });
       } else if (this.$route.query.addressFIL) {
         fil_validateaddress(this.inputAddress).then((res) => {
-          //验证地址是否正确
           if (res.data.result) {
             try {
-              //FIL转账方法
               this.MakeTransactionFIL();
             } catch (err) {
               this.loading = false;
@@ -1343,7 +1277,6 @@ export default {
       } else if (this.$route.query.address2) {
         if (bhp2_validateaddress(this.inputAddress, "bhp")) {
           try {
-            //2.0转账方法
             this.MakeTransaction2();
           } catch (err) {
             this.loading = false;
@@ -1366,7 +1299,7 @@ export default {
           Toast.fail(this.msg3);
         }
       } else if (this.$route.query.addressBTC) {
-          btc_validateaddress(this.inputAddress)
+        btc_validateaddress(this.inputAddress)
           .then((res) => {
             console.log(res);
             try {
@@ -1481,7 +1414,7 @@ export default {
         !this.prompt2 &&
         !this.prompt3 &&
         !this.prompt4 &&
-        !this.lastLowShow //ETH手续费不低于21000
+        !this.lastLowShow
       ) {
         this.show1 = true;
       }
@@ -1496,15 +1429,14 @@ export default {
     },
     checkAmount() {
       this.show = false;
-      this.inputAmount = this.inputAmount.match(/^\d*(\.?\d{0,4})/g)[0] || ""; //只能是最多四位小数的整数或小数
+      this.inputAmount = this.inputAmount.match(/^\d*(\.?\d{0,4})/g)[0] || "";
       var regstr = /^\d+(\.\d{0,4})?$/;
       if (parseFloat(this.amount) > parseFloat(this.inputAmount)) {
         this.prompt4 = false;
       } else {
-        // this.prompt4 = true; //余额不足
       }
       if (!regstr.test(this.inputAmount)) {
-        this.prompt2 = true; //小数或整数
+        this.prompt2 = true;
         this.prompt4 = false;
       } else {
         this.prompt2 = false;
@@ -1614,7 +1546,6 @@ export default {
     }
     i {
       display: flex;
-      // padding-left: 80px;
       justify-content: flex-start;
       align-items: center;
       font-size: 28px;

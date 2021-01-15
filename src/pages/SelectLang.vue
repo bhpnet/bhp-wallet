@@ -2,24 +2,24 @@
   <div class="selectLang">
     <div class="top">
       <img @click="clickReturn()" src="../assets/img/return1.png" alt />
-      <h2 style="font-weight:bold" v-text="$t('message.text100')">Multilingualism</h2>
+      <h2 style="font-weight: bold" v-text="$t('message.text100')">Multilingualism</h2>
     </div>
     <ul>
       <li @click="toCNorEN('cn')">
         <span>简体中文</span>
-        <img src="../assets/img/gou.png" v-show="'cn'==lang" />
+        <img src="../assets/img/gou.png" v-show="'cn' == lang" />
       </li>
       <li @click="toCNorEN('en')">
         <span>English</span>
-        <img src="../assets/img/gou.png" v-show="'en'==lang" />
+        <img src="../assets/img/gou.png" v-show="'en' == lang" />
       </li>
       <li @click="toCNorEN('ko')">
         <span>한국어</span>
-        <img src="../assets/img/gou.png" v-show="'ko'==lang" />
+        <img src="../assets/img/gou.png" v-show="'ko' == lang" />
       </li>
       <li @click="toCNorEN('ja')">
         <span>日本語</span>
-        <img src="../assets/img/gou.png" v-show="'ja'==lang" />
+        <img src="../assets/img/gou.png" v-show="'ja' == lang" />
       </li>
     </ul>
   </div>
@@ -29,7 +29,7 @@
 export default {
   data() {
     return {
-      lang: ""
+      lang: "",
     };
   },
   created() {
@@ -43,9 +43,8 @@ export default {
       this.lang = e;
       localStorage.setItem("lang", e);
       this.$i18n.locale = e;
-      // window.location.reload();
-    }
-  }
+    },
+  },
 };
 </script>
 

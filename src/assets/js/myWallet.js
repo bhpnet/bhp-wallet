@@ -5,7 +5,6 @@ import {
     btc_getBalance
 } from "../../api/api";
 
-//查询各个1.0钱包的资产
 export async function allAssetes(that) {
     that.valueSum1 = 0;
     for (let i in that.allWalletList) {
@@ -20,9 +19,8 @@ export async function allAssetes(that) {
             }
         });
     }
-    localStorage.setItem("accounts", JSON.stringify(that.allWalletList)); //给转账和 收款页面的所有钱包余额展示，不用多次调用查询每个钱包的接口
+    localStorage.setItem("accounts", JSON.stringify(that.allWalletList));
 }
-//查询各个BTC钱包的资产
 export async function allAssetesBTC(that) {
     that.valueSumBTC = 0;
 
@@ -39,21 +37,19 @@ export async function allAssetesBTC(that) {
         });
 
     }
-    localStorage.setItem("accountsBTC", JSON.stringify(that.allWalletListBTC)); //给转账和 收款页面的所有钱包余额展示，不用多次调用查询每个钱包的接口
+    localStorage.setItem("accountsBTC", JSON.stringify(that.allWalletListBTC));
 }
-//查询各个FIL钱包的资产
 export async function allAssetesFIL(that) {
     const {
         HttpJsonRpcConnector,
         HttpJsonRpcWalletProvider
-    } = require('filecoin.js') //防止进页面就卡顿
+    } = require('filecoin.js')
     that.valueSumFIL = 0;
     for (let i in that.allWalletListFIL) {
         const connector = new HttpJsonRpcConnector({
             url: "https://mrpc.bhpnet.io/fil/rpc/v0",
             token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc"
         });
-        //查询资产
         let rpc = new HttpJsonRpcWalletProvider(connector);
         let res = await rpc.getBalance(that.allWalletListFIL[i].address);
         if (res) {
@@ -66,9 +62,8 @@ export async function allAssetesFIL(that) {
     localStorage.setItem(
         "accountsFIL",
         JSON.stringify(that.allWalletListFIL)
-    ); //给转账和 收款页面的所有钱包余额展示，不用多次调用查询每个钱包的接口
+    );
 }
-//查询各个2.0钱包的资产
 export async function allAssetes2(that) {
     that.valueSum2 = 0;
     for (let i in that.allWalletList2) {
@@ -83,17 +78,15 @@ export async function allAssetes2(that) {
             }
         });
     }
-    localStorage.setItem("accounts2", JSON.stringify(that.allWalletList2)); //给转账和 收款页面的所有钱包余额展示，不用多次调用查询每个钱包的接口
+    localStorage.setItem("accounts2", JSON.stringify(that.allWalletList2));
 }
-//查询各个ETH钱包的资产
 export async function allAssetesETH(that) {
     that.valueSumETH = 0;
     for (let i in that.allWalletListETH) {
         await eth_getBalance(that.allWalletListETH[i].address).then(res => {
             if (res.data.result) {
                 that.allWalletListETH[i].assets =
-                    parseInt(res.data.result, 16) / Math.pow(10, 18); //parseInt(xxx,16)16进制转成10进制
-
+                    parseInt(res.data.result, 16) / Math.pow(10, 18);
                 that.valueSumETH += that.allWalletListETH[i].assets;
             } else {
                 that.allWalletListETH[i].assets = 0;
@@ -104,21 +97,19 @@ export async function allAssetesETH(that) {
     localStorage.setItem(
         "accountsETH",
         JSON.stringify(that.allWalletListETH)
-    ); //给转账和 收款页面的所有钱包余额展示，不用多次调用查询每个钱包的接口
+    );
 }
 
-//获取以太坊资产
 export function assetETH(that, address) {
     eth_getBalance(address).then(res => {
         if (res.data.result) {
             that.newWalletValue =
-                parseInt(res.data.result, 16) / Math.pow(10, 18); //parseInt(xxx,16)16进制转成10进制
+                parseInt(res.data.result, 16) / Math.pow(10, 18);
         } else {
             that.newWalletValue = 0;
         }
     });
 }
-//获取BTC资产
 export function assetBTC(that, address) {
     btc_getBalance(address).then((res) => {
         if (res.data.balance) {
@@ -132,17 +123,15 @@ export function assetBTC(that, address) {
     });
 
 }
-//获取FIL资产
 export async function assetFIL(that, address) {
     const {
         HttpJsonRpcConnector,
         HttpJsonRpcWalletProvider
-    } = require('filecoin.js') //防止进页面就卡顿
+    } = require('filecoin.js')
     const connector = new HttpJsonRpcConnector({
         url: "https://mrpc.bhpnet.io/fil/rpc/v0",
         token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc"
     });
-    //查询资产
     let rpc = new HttpJsonRpcWalletProvider(connector);
     let res = await rpc.getBalance(address);
     if (res) {
@@ -151,7 +140,6 @@ export async function assetFIL(that, address) {
         that.newWalletValue = 0;
     }
 }
-//获取地址资产
 export function assetes(that, address) {
     bhp_getBalance(address).then(res => {
         if (res.data.result.balance.length > 0) {
@@ -166,9 +154,7 @@ export function assetes(that, address) {
         that.loading = false;
     });
 }
-//获取地址资产2.0
 export function assetes2(that, address) {
-    // that.newWalletValue = 0;
     bhp2_getBalance(address).then(res => {
         if (res.data.result.value.coins.length > 0) {
             that.newWalletValue = parseFloat(

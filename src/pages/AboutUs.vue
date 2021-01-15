@@ -50,18 +50,10 @@ export default {
       this.$router.go(-1);
     },
     toAgreement() {
-      // if (localStorage.getItem("lang") == "cn") {
-      //   this.$router.push("/agreement");
-      // } else {
       this.$router.push("/agreementEn");
-      // }
     },
     toPolicy() {
-      //   if (localStorage.getItem("lang") == "cn") {
-      //     this.$router.push("/policy");
-      //   } else {
       this.$router.push("/policyEn");
-      // }
     },
   },
 };

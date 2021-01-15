@@ -51,7 +51,6 @@ export default {
     }
   },
   methods: {
-    //获取BTC资产余额
     assetBTC(address) {
       btc_getBalance(address).then((res) => {
         if (res.data.balance) {
@@ -66,14 +65,12 @@ export default {
         }
       });
     },
-    //获取FIL资产
     async assetFIL(address) {
       const connector = new HttpJsonRpcConnector({
         url: "https://mrpc.bhpnet.io/fil/rpc/v0",
         token:
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJyZWFkIiwid3JpdGUiLCJzaWduIiwiYWRtaW4iXX0.fzpHtg9VFX1K8s5vbyrHpGoWYEcJESybHziADoLw5Wc",
       });
-      //查询资产
       let rpc = new HttpJsonRpcWalletProvider(connector);
       let res = await rpc.getBalance(address);
       if (res) {
@@ -87,7 +84,6 @@ export default {
         this.assetName = "FIL";
       }
     },
-    //获取以太坊资产
     assetETH(address) {
       eth_getBalance(address).then((res) => {
         if (res.data.result) {
@@ -102,9 +98,7 @@ export default {
         }
       });
     },
-    //获取地址资产
     assetes(address) {
-      //钱包1.0查询余额
       bhp_getBalance(address).then((res) => {
         if (res.data.result.balance.length > 0) {
           res.data.result.balance.forEach((v, i) => {
@@ -122,7 +116,6 @@ export default {
       });
     },
     assetes2(address) {
-      //钱包2.0查询余额
       bhp2_getBalance(address).then((res) => {
         if (res.data.result.value.coins.length > 0) {
           this.value = (
@@ -143,7 +136,7 @@ export default {
     },
     sureLead() {
       if (this.$route.query.address1) {
-        this.accounts = JSON.parse(localStorage.getItem("accounts")) || []; //||[]很重要
+        this.accounts = JSON.parse(localStorage.getItem("accounts")) || [];
         this.accounts.push(this.newLeadWallet);
         localStorage.setItem("accounts", JSON.stringify(this.accounts));
         this.$router.replace({
@@ -153,7 +146,7 @@ export default {
           },
         });
       } else if (this.$route.query.address2) {
-        this.accounts = JSON.parse(localStorage.getItem("accounts2")) || []; //||[]很重要
+        this.accounts = JSON.parse(localStorage.getItem("accounts2")) || [];
         this.accounts.push(this.newLeadWallet);
         localStorage.setItem("accounts2", JSON.stringify(this.accounts));
         this.$router.replace({
@@ -163,7 +156,7 @@ export default {
           },
         });
       } else if (this.$route.query.addressETH) {
-        this.accounts = JSON.parse(localStorage.getItem("accountsETH")) || []; //||[]很重要
+        this.accounts = JSON.parse(localStorage.getItem("accountsETH")) || [];
         this.accounts.push(this.newLeadWallet);
         localStorage.setItem("accountsETH", JSON.stringify(this.accounts));
         this.$router.replace({
@@ -173,7 +166,7 @@ export default {
           },
         });
       } else if (this.$route.query.addressBTC) {
-        this.accounts = JSON.parse(localStorage.getItem("accountsBTC")) || []; //||[]很重要
+        this.accounts = JSON.parse(localStorage.getItem("accountsBTC")) || [];
         this.accounts.push(this.newLeadWallet);
         localStorage.setItem("accountsBTC", JSON.stringify(this.accounts));
         this.$router.replace({
@@ -183,7 +176,7 @@ export default {
           },
         });
       } else if (this.$route.query.addressFIL) {
-        this.accounts = JSON.parse(localStorage.getItem("accountsFIL")) || []; //||[]很重要
+        this.accounts = JSON.parse(localStorage.getItem("accountsFIL")) || [];
         this.accounts.push(this.newLeadWallet);
         localStorage.setItem("accountsFIL", JSON.stringify(this.accounts));
         this.$router.replace({

@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    <!-- <router-view :key="$route.fullPath" /> -->
-    <!-- <keep-alive include="myWallet"> -->
       <router-view />
-    <!-- </keep-alive> -->
     <van-overlay :show="show">
       <div class="wrapper">
         <div class="wrapper1">
@@ -87,82 +84,10 @@ export default {
       this.msg11 = "confirm";
       this.showEnOrCn = false;
     }
-
-    // 获取本地应用资源版本号
-    let that = this;
-    document.addEventListener("plusready", function() {//只能进入app触发或者刷新时触发
-      plus.runtime.getProperty(plus.runtime.appid, function(inf) {
-        var wgtVersion = Number(inf.version.replace(/[.]/g, ""));
-        axios.get("https://mrpc.bhpnet.io/app/checkVersion.json ").then(res => {
-          if (res.data.data) {
-            that.content_cn = res.data.data.content_cn;
-            that.content_en = res.data.data.content_en;
-            console.log(
-              "安装包：" + Number(res.data.data.version.replace(/[.]/g, "")),
-              "本机版本：" + wgtVersion,
-              typeof Number(res.data.data.version.replace(/[.]/g, "")),
-              typeof wgtVersion
-            );
-            if (
-              Number(res.data.data.version.replace(/[.]/g, "")) > wgtVersion
-            ) {
-              that.version = res.data.data.version
-              that.show = true;
-            }
-          }
-        });
-      });
-    });
   },
   methods: {
     toUpdates() {
-      this.downWgt();
-      this.show = false;
     },
-    downWgt() {
-      let that = this;
-      var wgtUrl = "https://mrpc.bhpnet.io/app/io.bhpnet.wallet.wgt ";
-      plus.nativeUI.showWaiting(that.msg3 + "...");
-      plus.downloader
-        .createDownload(
-          wgtUrl,
-          {
-            filename: "_doc/update/"
-          },
-          function(d, status) {
-            if (status == 200) {
-              console.log(that.msg4 + d.filename);
-              that.installWgt(d.filename); //安装wgt包
-            } else {
-              // console.log("下载失败！");
-              plus.nativeUI.alert(that.msg5);
-            }
-            plus.nativeUI.closeWaiting();
-          }
-        )
-        .start();
-    },
-
-    installWgt(path) {
-      let that = this;
-      plus.nativeUI.showWaiting(that.msg6 + "...");
-      plus.runtime.install(
-        path,
-        {},
-        function() {
-          plus.nativeUI.closeWaiting();
-          console.log("安装wgt文件成功！");
-          plus.nativeUI.alert(that.msg8, function() {
-            plus.runtime.restart();
-          });
-        },
-        function(e) {
-          plus.nativeUI.closeWaiting();
-          console.log("安装wgt文件失败[" + e.code + "]：" + e.message);
-          plus.nativeUI.alert(that.msg9 + "[" + e.code + "]：" + e.message);
-        }
-      );
-    }
   }
 };
 </script>
@@ -192,7 +117,6 @@ body,
   left: 0;
   right: 0;
   bottom: 0;
-  // z-index: 999;
   .wrapper1 {
     display: flex;
     align-items: center;

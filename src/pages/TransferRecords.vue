@@ -3,14 +3,14 @@
     <img class="returnImg" @click="clickReturn()" src="../assets/img/return.png" alt />
 
     <img class="img" src="../assets/img/logoBhp2.png" alt />
-    <p class="asset">{{$route.query.allBHP}} BHP</p>
-    <span class="assetRmb">¥ {{parseFloat($route.query.BHPToRMB).toFixed(2)}}</span>
+    <p class="asset">{{ $route.query.allBHP }} BHP</p>
+    <span class="assetRmb">¥ {{ parseFloat($route.query.BHPToRMB).toFixed(2) }}</span>
 
     <van-tabs v-model="active">
       <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
         <!-- <van-tab title="转出"> -->
         <ul>
-          <li @click="toTransferDetails()" v-for="(v,i) of this.listTo" :key="i">
+          <li @click="toTransferDetails()" v-for="(v, i) of this.listTo" :key="i">
             <span>转出</span>
             <span>-120.00</span>
             <div>
@@ -33,13 +33,11 @@ export default {
       active: 0,
       isLoading: false,
       show1: false,
-      listTo: []
+      listTo: [],
     };
   },
   beforeRouteEnter(to, from, next) {
-    next(vm => {
-      
-    });
+    next((vm) => {});
   },
   created() {
     this.showEmptyLogo();
@@ -51,12 +49,11 @@ export default {
     toTransferDetails() {
       this.$router.push({
         path: "transferDetails",
-        query: { transferDetails: "transferDetails" }
+        query: { transferDetails: "transferDetails" },
       });
     },
     onRefresh() {
       setTimeout(() => {
-        // this.Toast("刷新成功");
         this.isLoading = false;
       }, 1000);
     },
@@ -64,12 +61,12 @@ export default {
       if (this.listTo.length == "0") {
         this.show1 = true;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style lang="less" >
+<style lang="less">
 .transferRecords {
   display: flex;
   flex-direction: column;
@@ -103,7 +100,6 @@ export default {
     margin-bottom: 80px;
     color: rgba(1, 6, 19, 1);
   }
-  //菜单头部暂无法修改样式
 
   .van-tabs__line {
     background: #000;

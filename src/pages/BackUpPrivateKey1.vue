@@ -1,13 +1,17 @@
 <template>
   <div class="backUpPrivateKey1">
     <img @click="clickReturn()" src="../assets/img/return1.png" alt />
-    <h2 style="font-weight:bold" v-text="$t('message.text80')">导出私钥</h2>
-    <p class="topPrompt" v-text="$t('message.text76')">拥有私钥即拥有您的钱包资产，私钥一旦丢失，将无法找回您的资产，建议使用笔纸正确抄写，并存放至安全的地方。</p>
+    <h2 style="font-weight: bold" v-text="$t('message.text80')">导出私钥</h2>
+    <p class="topPrompt" v-text="$t('message.text76')">
+      拥有私钥即拥有您的钱包资产，私钥一旦丢失，将无法找回您的资产，建议使用笔纸正确抄写，并存放至安全的地方。
+    </p>
     <div class="noScreenshot">
       <img src="../assets/img/noScreenshot.png" alt />
       <span v-text="$t('message.text33')">请勿截图</span>
     </div>
-    <p v-text="$t('message.text77')">私钥用于恢复或重置钱包密码，为了保障您钱包资产安全，请立即备份您的钱包私钥。</p>
+    <p v-text="$t('message.text77')">
+      私钥用于恢复或重置钱包密码，为了保障您钱包资产安全，请立即备份您的钱包私钥。
+    </p>
 
     <button @click="toBackUp()" v-text="$t('message.text81')">导出</button>
   </div>
@@ -17,17 +21,17 @@
 export default {
   methods: {
     clickReturn() {
-        this.$router.go(-1);
+      this.$router.go(-1);
     },
     toBackUp() {
-        this.$router.push({
-                path: "/backUpPrivateKey2", //看去钱包主页，还是跳转去详情页面
-                query: {
-                  exportBTC: this.$route.query.exportBTC,
-                },
-              });
-    }
-  }
+      this.$router.push({
+        path: "/backUpPrivateKey2",
+        query: {
+          exportBTC: this.$route.query.exportBTC,
+        },
+      });
+    },
+  },
 };
 </script>
 

@@ -16,8 +16,8 @@ export function deleteETH(that, i) {
                 })
                 .then(() => {
                     that.allWalletListETH.splice(i, 1);
-                    that.walletType = "BHP"; //用来让值变化，更新视图
-                    that.walletType = "ETH"; //恢复本来的值
+                    that.walletType = "BHP";
+                    that.walletType = "ETH";
                     localStorage.setItem(
                         "accountsETH",
                         JSON.stringify(that.allWalletListETH)
@@ -49,8 +49,8 @@ export function deleteBTC(that, i) {
                 })
                 .then(() => {
                     that.allWalletListBTC.splice(i, 1);
-                    that.walletType = "BHP"; //用来让值变化，更新视图
-                    that.walletType = "BTC"; //恢复本来的值
+                    that.walletType = "BHP";
+                    that.walletType = "BTC";
                     localStorage.setItem(
                         "accountsBTC",
                         JSON.stringify(that.allWalletListBTC)
@@ -82,8 +82,8 @@ export function deleteFIL(that, i) {
                 })
                 .then(() => {
                     that.allWalletListFIL.splice(i, 1);
-                    that.walletType = "BHP"; //用来让值变化，更新视图
-                    that.walletType = "FIL"; //恢复本来的值
+                    that.walletType = "BHP";
+                    that.walletType = "FIL";
                     localStorage.setItem(
                         "accountsFIL",
                         JSON.stringify(that.allWalletListFIL)
@@ -175,7 +175,6 @@ export function delete2(that, i) {
         }
     }
 }
-//备份私钥输入密码
 export function surePWDPrivateKey(that) {
     try {
         if (that.walletType == "BHP") {
@@ -213,7 +212,7 @@ export function surePWDPrivateKey(that) {
                 privateKey
             );
             that.$router.push({
-                path: "/backUpPrivateKey1", //看去钱包主页，还是跳转去详情页面
+                path: "/backUpPrivateKey1",
                 query: {
                     exportBTC: 'WIF',
                 },
@@ -226,9 +225,8 @@ export function surePWDPrivateKey(that) {
     }
 
 }
-//备份助记词输入密码
 export function surePWDMnemonic(that, i) {
-    that.$store.commit("getWalletType", ""); //备份助记词状态清空
+    that.$store.commit("getWalletType", "");
     try {
         if (that.walletType == "BHP") {
             if (that.allWalletList[that.index].phrase) {

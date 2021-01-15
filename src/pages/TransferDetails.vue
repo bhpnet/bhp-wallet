@@ -35,33 +35,32 @@ export default {
   data() {
     return {};
   },
-  //转出记录信息存本地，在这个页面取就是了，包含币种====================================
   methods: {
     clickReturn() {
       if (this.$route.query.address1) {
         this.$router.replace({
           path: "/indexHome/myWallet",
           query: {
-            address1: this.$route.query.address1
-          }
+            address1: this.$route.query.address1,
+          },
         });
       } else if (this.$route.query.address2) {
         this.$router.replace({
           path: "/indexHome/myWallet",
           query: {
-            address2: this.$route.query.address2
-          }
+            address2: this.$route.query.address2,
+          },
         });
       } else if (this.$route.query.addressETH) {
         this.$router.replace({
           path: "/indexHome/myWallet",
           query: {
-            addressETH: this.$route.query.addressETH
-          }
+            addressETH: this.$route.query.addressETH,
+          },
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -113,7 +112,7 @@ export default {
       align-items: center;
       height: 110px;
       border-bottom: 1px #e6e9ed solid;
-      
+
       span:first-child {
         width: 138px;
         font-size: 28px;

@@ -175,10 +175,7 @@
       <h2 v-text="$t('message.text38')">钱包列表</h2>
       <div class="maxDiv">
         <div class="main">
-          <div
-            v-show="walletRightType == 'ETH'"
-            class="walletsBox walletsBoxETH"
-          >
+          <div v-show="walletRightType == 'ETH'" class="walletsBox walletsBoxETH">
             <div
               v-for="(item, index) in this.allWalletListETH"
               :key="index"
@@ -199,10 +196,7 @@
               </p>
             </div>
           </div>
-          <div
-            v-show="walletRightType == 'BHP'"
-            class="walletsBox walletsBoxBHP"
-          >
+          <div v-show="walletRightType == 'BHP'" class="walletsBox walletsBoxBHP">
             <div
               v-for="(item, index) in this.allWalletList"
               :key="index"
@@ -223,10 +217,7 @@
               </p>
             </div>
           </div>
-          <div
-            v-show="walletRightType == 'BHP2'"
-            class="walletsBox walletsBoxBHP2"
-          >
+          <div v-show="walletRightType == 'BHP2'" class="walletsBox walletsBoxBHP2">
             <div
               v-for="(item, index) in this.allWalletList2"
               :key="index"
@@ -247,10 +238,7 @@
               </p>
             </div>
           </div>
-          <div
-            v-show="walletRightType == 'FIL'"
-            class="walletsBox walletsBoxFIL"
-          >
+          <div v-show="walletRightType == 'FIL'" class="walletsBox walletsBoxFIL">
             <div
               v-for="(item, index) in this.allWalletListFIL"
               :key="index"
@@ -271,10 +259,7 @@
               </p>
             </div>
           </div>
-          <div
-            v-show="walletRightType == 'BTC'"
-            class="walletsBox walletsBoxBTC"
-          >
+          <div v-show="walletRightType == 'BTC'" class="walletsBox walletsBoxBTC">
             <div
               v-for="(item, index) in this.allWalletListBTC"
               :key="index"
@@ -438,16 +423,16 @@ export default {
       allWalletListETH: [],
       allWalletListFIL: [],
       allWalletListBTC: [],
-      newWalletList: {}, //当前的钱包
-      valueSum1: 0, //钱包余额之和
+      newWalletList: {},
+      valueSum1: 0,
       valueSum2: 0,
       valueSumETH: 0,
       valueSumFIL: 0,
       valueSumBTC: 0,
-      newWalletValue: 0, //当前钱包币余额
-      cnyPrice: 0, //币价
-      walletType: "", //控制钱包主页相关参数
-      walletRightType: "", //控制切换钱包的列表
+      newWalletValue: 0,
+      cnyPrice: 0,
+      walletType: "",
+      walletRightType: "",
       walletLogo: "",
       symbols: "",
       msg: "No Network!",
@@ -459,17 +444,15 @@ export default {
           status: true,
           decimals: 18,
           ETHAsstesSum: 0,
-          price: 0, //以太坊多资产币价
+          price: 0,
         },
       ],
     };
   },
   async created() {
-      this.loading = true
-    
-    // console.log(parseInt('0x2263cd620d727a00',16))16进制转10进制
-    // // new ethers.Wallet('privateKey');//用私钥导入的没有助记词
-    this.$store.commit("getWalletType", ""); //备份助记词状态清空，不然备份会添加重复的钱包
+    this.loading = true;
+
+    this.$store.commit("getWalletType", "");
     localStorage.setItem(
       "lang",
       localStorage.lang == undefined ? "en" : localStorage.lang
@@ -481,7 +464,7 @@ export default {
     }
     if (!navigator.onLine) {
       Toast.fail(this.msg);
-      this.loading = false
+      this.loading = false;
     }
     if (JSON.parse(localStorage.getItem("selectETHlist"))) {
       this.selectETHlist = JSON.parse(localStorage.getItem("selectETHlist"));
@@ -490,15 +473,10 @@ export default {
     }
     this.allWalletList = JSON.parse(localStorage.getItem("accounts")) || [];
     this.allWalletList2 = JSON.parse(localStorage.getItem("accounts2")) || [];
-    this.allWalletListFIL =
-      JSON.parse(localStorage.getItem("accountsFIL")) || [];
-    this.allWalletListETH =
-      JSON.parse(localStorage.getItem("accountsETH")) || [];
-    this.allWalletListBTC =
-      JSON.parse(localStorage.getItem("accountsBTC")) || [];
+    this.allWalletListFIL = JSON.parse(localStorage.getItem("accountsFIL")) || [];
+    this.allWalletListETH = JSON.parse(localStorage.getItem("accountsETH")) || [];
+    this.allWalletListBTC = JSON.parse(localStorage.getItem("accountsBTC")) || [];
     if (this.$route.query.address == "OpenToIndexHome") {
-      //打开应用跳转进入最新钱包或者备份完钱包跳转到钱包
-
       if (this.allWalletListETH.length != 0) {
         this.walletLogo = require("../assets/img/ETCsider.png");
         this.walletType = "ETH";
@@ -506,11 +484,7 @@ export default {
         this.newWalletList = this.allWalletListETH.pop();
         this.newWalletList.assets = 0;
         this.allWalletListETH.push(this.newWalletList);
-        localStorage.setItem(
-          "accountsETH",
-          JSON.stringify(this.allWalletListETH)
-        );
-        //ETH的查询资产方法和币价方法
+        localStorage.setItem("accountsETH", JSON.stringify(this.allWalletListETH));
         assetETH(this, this.newWalletList.address);
         this.getPrice("huoBiExchange", "eth_usdt");
         for (let i in this.selectETHlist) {
@@ -524,7 +498,6 @@ export default {
         this.newWalletList.assets = 0;
         this.allWalletList2.push(this.newWalletList);
         localStorage.setItem("accounts2", JSON.stringify(this.allWalletList2));
-        //2.0的方法
         assetes2(this, this.newWalletList.address);
         this.getPrice("digfinExchange", "bhp_usdt");
       } else if (this.allWalletListBTC.length != 0) {
@@ -534,11 +507,7 @@ export default {
         this.newWalletList = this.allWalletListBTC.pop();
         this.newWalletList.assets = 0;
         this.allWalletListBTC.push(this.newWalletList);
-        localStorage.setItem(
-          "accountsBTC",
-          JSON.stringify(this.allWalletListBTC)
-        );
-        //的查询资产方法和币价方法
+        localStorage.setItem("accountsBTC", JSON.stringify(this.allWalletListBTC));
         assetBTC(this, this.newWalletList.address);
         this.getPrice("huoBiExchange", "btc_usdt");
       } else if (this.allWalletListFIL.length != 0) {
@@ -548,27 +517,21 @@ export default {
         this.newWalletList = this.allWalletListFIL.pop();
         this.newWalletList.assets = 0;
         this.allWalletListFIL.push(this.newWalletList);
-        localStorage.setItem(
-          "accountsFIL",
-          JSON.stringify(this.allWalletListFIL)
-        );
-        //FIL的查询资产方法和币价方法
+        localStorage.setItem("accountsFIL", JSON.stringify(this.allWalletListFIL));
         assetFIL(this, this.newWalletList.address);
         this.getPrice("huoBiExchange", "fil_usdt");
       } else {
-        //this.allWalletList2.length == 0 && this.allWalletListETH.length == 0 && this.allWalletListFIL.length == 0
         this.walletLogo = require("../assets/img/logoBhp1Mini.png");
         this.walletType = "BHP";
         this.walletRightType = "BHP";
         this.newWalletList = this.allWalletList.pop();
-        this.newWalletList.assets = 0; //最新的钱包资产写个零站位，item.assets.toFixed(2)报错
+        this.newWalletList.assets = 0;
         this.allWalletList.push(this.newWalletList);
         localStorage.setItem("accounts", JSON.stringify(this.allWalletList));
         assetes(this, this.newWalletList.address);
-        this.getPrice("digfinExchange", "bhp_usdt"); //===========================================
+        this.getPrice("digfinExchange", "bhp_usdt");
       }
     } else if (this.$route.query.address1) {
-      //切换钱包刷新页面不丢失===============
       this.walletLogo = require("../assets/img/logoBhp1Mini.png");
       this.walletType = "BHP";
       this.walletRightType = "BHP";
@@ -590,7 +553,6 @@ export default {
       }
       assetes2(this, this.newWalletList.address);
       this.getPrice("okExchange");
-      //2.0的查询资产方法
     } else if (this.$route.query.addressETH) {
       this.walletLogo = require("../assets/img/ETCsider.png");
       this.walletType = "ETH";
@@ -628,10 +590,8 @@ export default {
       assetFIL(this, this.newWalletList.address);
       this.getPrice("okExchange", "fil_usdt");
     }
-    // allAssetes2(this);
-    allAssetes(this); //进入钱包管理可能会没资产信息
+    allAssetes(this);
     allAssetesETH(this);
-    //进入页面不加载fil
     allAssetesBTC(this);
   },
   beforeDestroy() {
@@ -641,16 +601,13 @@ export default {
     toETHlist() {
       this.$router.push("/ETHlist");
     },
-    //获取以太坊代币
     async getETHCoin(oneOfETHlist) {
       let web3;
       if (typeof web3 !== "undefined") {
         web3 = await new Web3(web3.currentProvider);
       } else {
         web3 = await new Web3(
-          new Web3.providers.HttpProvider(
-            "https://mrpc.bhpnet.io/eth"
-          )
+          new Web3.providers.HttpProvider("https://mrpc.bhpnet.io/eth")
         );
       }
       let contractAbi = [
@@ -913,15 +870,12 @@ export default {
           type: "event",
         },
       ];
-      // 定义合约
       let myContract = new web3.eth.Contract(contractAbi, oneOfETHlist.address);
       await this.getOtherERC(myContract, oneOfETHlist);
     },
-    //查询代币名称,总余额，精度
     async getOtherERC(currentContract, oneOfETHlist) {
       for (let i in this.selectETHlist) {
         if (this.selectETHlist[i].address == oneOfETHlist.address) {
-          //获取币价========================================================
           all_getPrice("huoBiExchange", oneOfETHlist.name + "_usdt").then((res) => {
             if (res.data.data) {
               if (localStorage.getItem("lang") == "cn") {
@@ -935,7 +889,6 @@ export default {
               this.selectETHlist[i].price = 0;
             }
           });
-          //address合约地址
           switch (oneOfETHlist.address) {
             case "0x6b175474e89094c44da98b954eedeac495271d0f":
               this.selectETHlist[i].logo = require("../assets/img/Dai.png");
@@ -965,9 +918,7 @@ export default {
               this.selectETHlist[i].logo = require("../assets/img/USDC.png");
               break;
             case "0xc00e94cb662c3520282e6f5717214004a7f26888":
-              this.selectETHlist[
-                i
-              ].logo = require("../assets/img/Compound.png");
+              this.selectETHlist[i].logo = require("../assets/img/Compound.png");
               break;
             default:
               this.selectETHlist[i].logo = require("../assets/img/WEIZHI.png");
@@ -1004,7 +955,6 @@ export default {
 
       localStorage.setItem("selectETHlist", JSON.stringify(this.selectETHlist));
     },
-    //切换eth钱包
     async changeWalletETH(index) {
       this.show = false;
       this.walletLogo = require("../assets/img/ETCsider.png");
@@ -1021,15 +971,10 @@ export default {
         },
       });
       this.newWalletList = this.allWalletListETH[index];
-      //查询资产和币价方法
 
       assetETH(this, this.newWalletList.address);
       this.getPrice("huoBiExchange", "eth_usdt");
-      // for (let i in this.selectETHlist) {
-      //   this.getETHCoin(this.selectETHlist[i]);
-      // }
     },
-    //切换FIL钱包
     changeWalletFIL(index) {
       this.show = false;
       this.walletLogo = require("../assets/img/FIL.png");
@@ -1046,13 +991,9 @@ export default {
         },
       });
       this.newWalletList = this.allWalletListFIL[index];
-      //查询资产和币价方法
       assetFIL(this, this.newWalletList.address);
       this.getPrice("huoBiExchange", "fil_usdt");
-
-      //===========================
     },
-    //切换BTC钱包
     changeWalletBTC(index) {
       this.show = false;
       this.walletLogo = require("../assets/img/BTC.png");
@@ -1069,13 +1010,9 @@ export default {
         },
       });
       this.newWalletList = this.allWalletListBTC[index];
-      //查询资产和币价方法
       assetBTC(this, this.newWalletList.address);
       this.getPrice("huoBiExchange", "btc_usdt");
-
-      //===========================
     },
-    //1.0切换钱包
     changeWallet(index) {
       this.show = false;
       this.walletLogo = require("../assets/img/logoBhp1Mini.png");
@@ -1095,7 +1032,6 @@ export default {
       assetes(this, this.newWalletList.address);
       this.getPrice("digfinExchange", "bhp_usdt");
     },
-    //2.0切换钱包
     changeWallet2(index) {
       this.show = false;
       for (let i in this.allWalletList2) {
@@ -1137,7 +1073,7 @@ export default {
             address2: this.newWalletList.address,
           },
         });
-      }else if (val == "BTC") {
+      } else if (val == "BTC") {
         this.$router.push({
           path: "/transferRecords1",
           query: {
@@ -1145,7 +1081,7 @@ export default {
           },
         });
       } else if (val == "ETH") {
-        if ((name !="ETH")) {
+        if (name != "ETH") {
           this.$router.push({
             path: "/transferRecords1",
             query: {
@@ -1173,13 +1109,12 @@ export default {
     changeWalletsBox(val) {
       this.walletRightType = val;
       if (val == "FIL") {
-        allAssetesFIL(this); //进入fil钱包再加载
+        allAssetesFIL(this);
       }
     },
     toWalletsManage() {
       this.$router.push("/walletsManage");
     },
-    //获取币价
     getPrice(exchange, usdt) {
       all_getPrice(exchange, usdt).then((res) => {
         if (res.data.data) {
@@ -1233,7 +1168,7 @@ export default {
       });
     },
     createWallet() {
-      this.show = false; //主页有缓存，不然返回主页会自动打开侧边栏
+      this.show = false;
       this.$router.push("/changeCreateWallet");
     },
     leadWallet() {
@@ -1245,7 +1180,6 @@ export default {
       this.show = true;
     },
     toReceiving() {
-      //还要把钱包类型也传过去=======================
       this.$router.push({
         path: "/indexHome/receiving",
         query: {
@@ -1256,7 +1190,6 @@ export default {
       });
     },
     toTransfer() {
-      //这里要判断各种情况==================比如新进入的钱包，切换的钱包
       if (this.walletType == "BHP") {
         this.$router.push({
           path: "/indexHome/transfer",
@@ -1300,7 +1233,6 @@ export default {
       }
     },
     startRecognize() {
-      //这里要判断各种情况========
       if (this.walletType == "BHP") {
         this.$router.push({
           path: "/indexHome/startRecognize",
@@ -1456,7 +1388,6 @@ export default {
       }
       .main {
         width: 100%;
-        // height: 600px;
         overflow: auto;
         display: flex;
         flex-direction: column;
@@ -1606,7 +1537,6 @@ export default {
     background: url("../assets/img/walletBanner1.png") no-repeat;
     background-size: 100% 100%;
     padding-left: 40px;
-    // box-shadow: 6px 12px 12px #ddd;
     box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.12);
     position: relative;
     .addressMsg {
@@ -1744,7 +1674,6 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      // padding: 0 70px;
       width: 670px;
       height: 128px;
       background: #ffffff;

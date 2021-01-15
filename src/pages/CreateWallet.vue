@@ -2,10 +2,10 @@
   <div class="createWallet">
     <div class="createWallet1">
       <div class="loading" v-show="loading">
-        <van-loading color="#fff" class="loadImg" vertical>{{msg}}</van-loading>
+        <van-loading color="#fff" class="loadImg" vertical>{{ msg }}</van-loading>
       </div>
       <img @click="clickReturn()" src="../assets/img/return.png" alt />
-      <h2 style="font-weight:bold" v-text="$t('message.text8')">创建钱包</h2>
+      <h2 style="font-weight: bold" v-text="$t('message.text8')">创建钱包</h2>
       <div class="inputName">
         <img src="../assets/img/acc.png" alt />
 
@@ -20,7 +20,9 @@
       <div class="inputPwd">
         <img src="../assets/img/pass.png" alt />
         <div class="msgDiv">
-          <span v-show="prompt1" v-text="$t('message.text10')">中文，英文字母和数字及下划线(4-10位)</span>
+          <span v-show="prompt1" v-text="$t('message.text10')"
+            >中文，英文字母和数字及下划线(4-10位)</span
+          >
         </div>
         <span class="inputLable" v-text="$t('message.text11')">密码</span>
         <input
@@ -34,7 +36,9 @@
         <img src="../assets/img/pass.png" alt />
 
         <div class="msgDiv">
-          <span v-show="prompt2" v-text="$t('message.text13')">字符为8~30，包含数字和字母</span>
+          <span v-show="prompt2" v-text="$t('message.text13')"
+            >字符为8~30，包含数字和字母</span
+          >
         </div>
 
         <span class="inputLable" v-text="$t('message.text14')">确认密码</span>
@@ -50,7 +54,9 @@
       </div>
 
       <button @click="toCreateWallet()" v-text="$t('message.text16')">创建钱包</button>
-      <div v-text="$t('message.text17')" class="toLead" @click="leadWallet()">导入钱包</div>
+      <div v-text="$t('message.text17')" class="toLead" @click="leadWallet()">
+        导入钱包
+      </div>
     </div>
   </div>
 </template>
@@ -61,7 +67,7 @@ import {
   createWalletFIL,
   createWalletBTC,
   createWalletETH,
-  createMnemonic
+  createMnemonic,
 } from "../assets/js/createWallet";
 export default {
   data() {
@@ -79,7 +85,7 @@ export default {
       createWalletObjETH: {},
       createWalletObjFIL: {},
       createWalletObjBTC: {},
-      msg: "Being created..."
+      msg: "Being created...",
     };
   },
   created() {
@@ -106,8 +112,6 @@ export default {
             let mnemonic = createMnemonic();
             createWallet1(this, mnemonic);
           } else if (this.$route.query.createWallet == "createWallet2") {
-            // let mnemonic = createMnemonic();
-            // createWallet2(this, mnemonic);
           } else if (this.$route.query.createWallet == "createWalletETH") {
             let mnemonic = createMnemonic();
 
@@ -115,19 +119,13 @@ export default {
           } else if (this.$route.query.createWallet == "createWalletBTC") {
             let mnemonic = createMnemonic();
             createWalletBTC(this, mnemonic);
-
           } else if (this.$route.query.createWallet == "createWalletFIL") {
-            // let mnemonic = createMnemonic();
-            // createWalletFIL(this, mnemonic);
           } else if (this.$route.query.createWallet == "createWalletAll") {
-            //需要共用一套助记词
             let mnemonic = createMnemonic();
-            // await createWallet2(this, mnemonic);
             await createWalletETH(this, mnemonic);
             await createWalletBTC(this, mnemonic);
-            // await createWalletFIL(this, mnemonic);
             await createWallet1(this, mnemonic);
-            this.$store.commit("getWalletType", "All"); //up3区分各个钱包用的
+            this.$store.commit("getWalletType", "All");
           }
           this.loading = false;
           this.$router.push("/backUp1");
@@ -161,14 +159,14 @@ export default {
       }
     },
     checkPwd() {
-      this.prompt3 = true
+      this.prompt3 = true;
       var regstr = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/;
       if (!regstr.test(this.inputPwd)) {
         this.prompt2 = true;
       } else {
         this.prompt2 = false;
       }
-      this.checkAgainPwd()
+      this.checkAgainPwd();
     },
     checkAgainPwd() {
       if (this.inputAgainPwd != this.inputPwd) {
@@ -176,8 +174,8 @@ export default {
       } else {
         this.prompt3 = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -192,7 +190,7 @@ export default {
   background: url("../assets/img/createBanner.png") no-repeat;
   background-size: cover;
   .createWallet1 {
-    position: relative; //安卓用flex，唤起输入法会把页面挤扁
+    position: relative;
     height: 100vh;
     overflow-y: auto;
     .loading {
@@ -273,7 +271,6 @@ export default {
     .inputPwd,
     .inputAgainPwd {
       padding: 0 45px;
-      // height: 200px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -334,7 +331,6 @@ export default {
       }
     }
     .inputName {
-      // padding-top: 90px;
       justify-content: space-between;
       .inputLable {
         margin-top: 0;

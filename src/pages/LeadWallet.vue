@@ -128,13 +128,13 @@ export default {
       inputPwd: "",
       inputAgainPwd: "",
       spanActive: "助记词",
-      leadPrivateKey: "", //私钥
+      leadPrivateKey: "",
       WordsOrkeystore: false,
       createWalletObj: {},
       accounts: [],
-      inputMnemonic: "", //输入框数组
-      flag: false, //判断钱包名字是否重复和助记词是否都填写
-      flag1: false, //导入时钱包有重名的，确认后直接跳首页，新钱包就去确认导入页面
+      inputMnemonic: "",
+      flag: false,
+      flag1: false,
       msg1:
         "The wallet already exists. If you continue importing, you will overwrite the original wallet. Are you sure you want to continue ?",
       msg2: "Please enter the correct mnemonic",
@@ -149,7 +149,6 @@ export default {
       this.$route.query.leadWallet == "leadWallet2" ||
       this.$route.query.leadWallet == "leadWalletFIL"
     ) {
-      //FIL和2.0没有私钥导入
       this.BHP2Hide = false;
     }
     if (localStorage.getItem("lang") == "cn") {
@@ -166,7 +165,11 @@ export default {
       this.msg4 = "Please enter leadPrivateKey";
       this.msg5 = "leadPrivateKey error!";
     }
-    Notify({ duration: 5000,background: '#3d7fff', message: this.$t('message.text123') })
+    Notify({
+      duration: 5000,
+      background: "#3d7fff",
+      message: this.$t("message.text123"),
+    });
   },
   methods: {
     toFocusWords() {
@@ -198,14 +201,14 @@ export default {
       }
     },
     checkPwd() {
-      this.prompt3 = true
+      this.prompt3 = true;
       var regstr = /^[0-9a-zA-Z]{8,30}$/;
       if (!regstr.test(this.inputPwd)) {
         this.prompt2 = true;
       } else {
         this.prompt2 = false;
       }
-      this.checkAgainPwd()
+      this.checkAgainPwd();
     },
     checkAgainPwd() {
       if (this.inputAgainPwd != this.inputPwd) {
@@ -219,13 +222,13 @@ export default {
 </script>
 
 <style lang="less">
- .van-notify{
-    font-size: 22px;
-    padding:14px 16px;
-    line-height: 26px;
-  }
+.van-notify {
+  font-size: 22px;
+  padding: 14px 16px;
+  line-height: 26px;
+}
 .leadWallet {
-  position: relative; //安卓用flex，唤起输入法会把页面挤扁
+  position: relative;
   padding-bottom: 44px;
   .loading {
     position: fixed;
@@ -317,14 +320,13 @@ export default {
       border: none;
       line-height: 30px;
     }
-     .passwordInput{
+    .passwordInput {
       position: absolute;
       z-index: -1;
-      color:transparent;//隐藏光标
-      caret-color:transparent;
-      text-indent: -999em;//段落缩进IOS
-      margin-left: -100%
-      // text-shadow: 0 0 0 #000//显示文字;
+      color: transparent;
+      caret-color: transparent;
+      text-indent: -999em;
+      margin-left: -100%;
     }
   }
   img {

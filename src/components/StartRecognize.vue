@@ -4,12 +4,12 @@
       <img @click="clickReturn()" src="../assets/img/return1.png" alt />
     </div>
     <div id="bcid">
-      <div style="height:40%"></div>
+      <div style="height: 40%"></div>
     </div>
   </div>
 </template>
 
-<script type='text/ecmascript-6'>
+<script type="text/ecmascript-6">
 let scan = null;
 
 export default {
@@ -31,13 +31,11 @@ export default {
       this.closeScan();
       this.$router.go(-1);
     },
-    //创建扫描控件
-    startRecognize() {
+        startRecognize() {
       let that = this;
       if (!window.plus) return;
       var filter;
-      var styles = {frameColor: "#4377FF",scanbarColor: "#4377FF"};//边框属性，中间线属性，背景色
-      scan = new plus.barcode.Barcode('bcid',filter,styles);
+      var styles = {frameColor: "#4377FF",scanbarColor: "#4377FF"};      scan = new plus.barcode.Barcode('bcid',filter,styles);
       scan.onmarked = onmarked;
       that.startScan()
 
@@ -107,18 +105,15 @@ export default {
         }
       }
     },
-    //开始扫描
-    startScan() {
+        startScan() {
       if (!window.plus) return;
       scan.start();
     },
-    //关闭扫描
-    cancelScan() {
+        cancelScan() {
       if (!window.plus) return;
       scan.cancel();
     },
-    //关闭条码识别控件
-    closeScan() {
+        closeScan() {
       if (!window.plus) return;
       scan.close();
     }
@@ -142,7 +137,6 @@ export default {
   .top {
     position: absolute;
     width: 100%;
-    // height: 100px;
     left: 0;
     top: 0;
     z-index: 2;

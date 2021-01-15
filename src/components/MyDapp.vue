@@ -20,7 +20,7 @@
         <img src="../assets/img/aboutUs.png" alt />
         <span v-text="$t('message.text26')">关于我们</span>
       </li>
-      <li @click="toUpdate()">
+      <li>
         <img src="../assets/img/update.png" alt />
         <span v-text="$t('message.text026')">检查更新</span>
       </li>
@@ -57,29 +57,9 @@ export default {
   },
   created() {
     this.tab =
-      localStorage.getItem("lang") == undefined
-        ? "en"
-        : localStorage.getItem("lang");
+      localStorage.getItem("lang") == undefined ? "en" : localStorage.getItem("lang");
   },
   methods: {
-    toUpdate() {
-      // 获取本地应用资源版本号
-      let that = this;
-
-      var wgtVersion = Number(this.wgtVersion.replace(/[.]/g, ""));
-      axios.get("https://mrpc.bhpnet.io/app/checkVersion.json").then((res) => {
-        if (res.data.data) {
-          // console.log(
-          //   "安装包：" + Number(res.data.data.version.replace(/[.]/g, "")),
-          //   "本机版本：" + wgtVersion);
-          if (Number(res.data.data.version.replace(/[.]/g, "")) > wgtVersion) {
-            location.reload(); //发现新版本，刷新页面
-          } else {
-            alert("This is the latest version");
-          }
-        }
-      });
-    },
     toLanguage() {
       this.$router.push("/selectLang");
     },
@@ -87,7 +67,6 @@ export default {
       if (this.$route.query.walletType) {
         this.$router.go(-1);
       } else {
-        //否则可能不带参数回首页，比如点了myDapp的钱包管理
         this.$router.replace({
           path: "/indexHome/myWallet",
           query: {

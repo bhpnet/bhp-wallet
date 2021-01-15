@@ -1,15 +1,15 @@
 <template>
   <div class="backUp3">
     <img @click="clickReturn()" src="../assets/img/return1.png" alt />
-    <h2 style="font-weight:bold" v-text="$t('message.text35')">备份助记词</h2>
+    <h2 style="font-weight: bold" v-text="$t('message.text35')">备份助记词</h2>
     <p v-text="$t('message.text119')"></p>
     <p v-text="$t('message.text120')"></p>
 
     <div class="mnemonicWords mnemonicWords1">
-      <div v-for="(v,i) of list1" :key="i" @click="ReturnBackUp(v)">{{v}}</div>
+      <div v-for="(v, i) of list1" :key="i" @click="ReturnBackUp(v)">{{ v }}</div>
     </div>
     <div class="mnemonicWords mnemonicWords2">
-      <div v-for="(v,i) of list2" :key="i" @click="toBackUp(v)">{{v}}</div>
+      <div v-for="(v, i) of list2" :key="i" @click="toBackUp(v)">{{ v }}</div>
     </div>
     <button @click="clickSure" v-text="$t('message.text4')">确认</button>
   </div>
@@ -22,11 +22,9 @@ export default {
     return {
       listWords: [],
       list1: [],
-      list2: [
-        //模拟顺序打乱的助记词
-      ],
+      list2: [],
       msg1: "Wrong order of mnemonics!",
-      msg2: "Backup succeeded!"
+      msg2: "Backup succeeded!",
     };
   },
   created() {
@@ -44,61 +42,54 @@ export default {
   methods: {
     randomsort(a, b) {
       return Math.random() > 0.5 ? -1 : 1;
-      //用Math.random()函数生成0~1之间的随机数与0.5比较，返回-1或1
     },
     clickReturn() {
       this.$router.go(-1);
     },
     clickSure() {
-      if (
-        this.list1.every((v, i) => v == this.listWords[i]) &&
-        this.list1.length != 0
-      ) {
-        //空数组使用every会一直得到true,但是空数组使用some却会得到false
+      if (this.list1.every((v, i) => v == this.listWords[i]) && this.list1.length != 0) {
         Toast.success(this.msg2);
-        //需要把this.$store.state.walletType清空，不然进入钱包再备份，就会再次导入钱包
         if (this.$store.state.walletType == "BHP") {
           this.saveWalletBHP();
           this.$router.replace({
             path: "/indexHome/myWallet",
             query: {
-              address1: this.$store.state.newCreateWalletBHP.address
-            }
+              address1: this.$store.state.newCreateWalletBHP.address,
+            },
           });
         } else if (this.$store.state.walletType == "BHP2") {
           this.saveWalletBHP2();
           this.$router.replace({
             path: "/indexHome/myWallet",
             query: {
-              address2: this.$store.state.newCreateWalletBHP2.address
-            }
+              address2: this.$store.state.newCreateWalletBHP2.address,
+            },
           });
         } else if (this.$store.state.walletType == "ETH") {
           this.saveWalletETH();
           this.$router.replace({
             path: "/indexHome/myWallet",
             query: {
-              addressETH: this.$store.state.newCreateWalletETH.address
-            }
+              addressETH: this.$store.state.newCreateWalletETH.address,
+            },
           });
-        }else if (this.$store.state.walletType == "BTC") {
+        } else if (this.$store.state.walletType == "BTC") {
           this.saveWalletBTC();
           this.$router.replace({
             path: "/indexHome/myWallet",
             query: {
-              addressBTC: this.$store.state.newCreateWalletBTC.address
-            }
+              addressBTC: this.$store.state.newCreateWalletBTC.address,
+            },
           });
         } else if (this.$store.state.walletType == "FIL") {
           this.saveWalletFIL();
           this.$router.replace({
             path: "/indexHome/myWallet",
             query: {
-              addressFIL: this.$store.state.newCreateWalletFIL.address
-            }
+              addressFIL: this.$store.state.newCreateWalletFIL.address,
+            },
           });
-        }
-        else if (this.$store.state.walletType == "All") {
+        } else if (this.$store.state.walletType == "All") {
           this.saveWalletBHP();
           this.saveWalletBHP2();
           this.saveWalletETH();
@@ -107,17 +98,15 @@ export default {
           this.$router.replace({
             path: "/indexHome/myWallet",
             query: {
-              addressETH: this.$store.state.newCreateWalletETH.address
-            }
+              addressETH: this.$store.state.newCreateWalletETH.address,
+            },
           });
         } else {
-          //钱包里面进行备注助记词
-
           this.$router.replace({
             path: "/indexHome/myWallet",
             query: {
-              address: "OpenToIndexHome"
-            }
+              address: "OpenToIndexHome",
+            },
           });
         }
       } else {
@@ -125,27 +114,27 @@ export default {
       }
     },
     saveWalletBHP() {
-      let accounts = JSON.parse(localStorage.getItem("accounts")) || []; //||[]很重要
+      let accounts = JSON.parse(localStorage.getItem("accounts")) || [];
       accounts.push(this.$store.state.newCreateWalletBHP);
       localStorage.setItem("accounts", JSON.stringify(accounts));
     },
     saveWalletBHP2() {
-      let accounts = JSON.parse(localStorage.getItem("accounts2")) || []; //||[]很重要
+      let accounts = JSON.parse(localStorage.getItem("accounts2")) || [];
       accounts.push(this.$store.state.newCreateWalletBHP2);
       localStorage.setItem("accounts2", JSON.stringify(accounts));
     },
     saveWalletETH() {
-      let accounts = JSON.parse(localStorage.getItem("accountsETH")) || []; //||[]很重要
+      let accounts = JSON.parse(localStorage.getItem("accountsETH")) || [];
       accounts.push(this.$store.state.newCreateWalletETH);
       localStorage.setItem("accountsETH", JSON.stringify(accounts));
     },
     saveWalletBTC() {
-      let accounts = JSON.parse(localStorage.getItem("accountsBTC")) || []; //||[]很重要
+      let accounts = JSON.parse(localStorage.getItem("accountsBTC")) || [];
       accounts.push(this.$store.state.newCreateWalletBTC);
       localStorage.setItem("accountsBTC", JSON.stringify(accounts));
     },
     saveWalletFIL() {
-      let accounts = JSON.parse(localStorage.getItem("accountsFIL")) || []; //||[]很重要
+      let accounts = JSON.parse(localStorage.getItem("accountsFIL")) || [];
       accounts.push(this.$store.state.newCreateWalletFIL);
       localStorage.setItem("accountsFIL", JSON.stringify(accounts));
     },
@@ -156,8 +145,8 @@ export default {
     ReturnBackUp(v) {
       this.list2.push(v);
       this.list1.splice(this.list1.indexOf(v), 1);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -207,7 +196,7 @@ export default {
     align-content: flex-start;
     border: 2px solid #4377ff;
     border-radius: 17px;
-    margin-top:50px;
+    margin-top: 50px;
     div {
       width: 151px;
       height: 72px;
