@@ -1124,7 +1124,7 @@ export default {
             .sendTransaction({
               to: this.inputAddress,
               value: "0x" + num.toString(16),
-              gasPrice: "0x" + (that.gasLimit * 1000000).toString(16),
+              gasPrice: "0x" + (that.gasPrice * 1000000000).toString(16),
               gasLimit: that.gasLimit,
             })
             .then(function (tx) {
